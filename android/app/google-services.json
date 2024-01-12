@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "485677018041",
+    "project_id": "app-webding",
+    "storage_bucket": "app-webding.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:485677018041:android:8bdcca1ec191c0c582a468",
+        "android_client_info": {
+          "package_name": "com.example.webdding"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDeaZ9PWjxNJypt1YW2L2tiQnGj9Abor2U"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
