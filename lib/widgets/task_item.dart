@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:webdding/models/task.dart';
+import 'package:webdding/models/work_schedule.dart';
 
 class TaskItem extends StatelessWidget {
-  final Task task;
+  // final Task task;
+  final WorkSchedule workSchedule;
 
-  const TaskItem({super.key, required this.task});
+  const TaskItem({super.key, required this.workSchedule});
 
   @override
   Widget build(BuildContext context) {
@@ -35,16 +36,18 @@ class TaskItem extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Padding(
-                    padding: EdgeInsetsDirectional.fromSTEB(4, 0, 0, 0),
-                    child: Text('Doctors Check In',
-                        style: TextStyle(
-                          fontFamily: 'Inter',
-                          color: Color(0xFF090F13),
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16,
-                        )),
-                  ),
+                  // Padding(
+                  //   padding: const EdgeInsetsDirectional.fromSTEB(4, 0, 0, 0),
+                  //   child: Text(
+                  //       "Khách hàng: ${workSchedule.customerName} - (${workSchedule.customerPhone})",
+                  //       style: const TextStyle(
+                  //         fontFamily: 'Inter',
+                  //         color: Color(0xFF090F13),
+                  //         fontWeight: FontWeight.bold,
+                  //         fontSize: 16,
+                  //       )),
+                  // ),
+                  const SizedBox(height: 8.0),
                   Padding(
                     padding: const EdgeInsetsDirectional.fromSTEB(0, 4, 0, 0),
                     child: Row(
@@ -55,56 +58,140 @@ class TaskItem extends StatelessWidget {
                               const EdgeInsetsDirectional.fromSTEB(0, 0, 8, 0),
                           child: Card(
                             clipBehavior: Clip.antiAliasWithSaveLayer,
-                            color: Colors.orange,
+                            color: const Color.fromARGB(255, 204, 144, 55),
                             elevation: 0,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(8),
                             ),
-                            child: const Padding(
-                              padding:
-                                  EdgeInsetsDirectional.fromSTEB(8, 4, 8, 4),
+                            child: Padding(
+                              padding: const EdgeInsetsDirectional.fromSTEB(
+                                  8, 4, 8, 4),
                               child: Text(
-                                '2:20pm',
-                                style: TextStyle(
+                                '${workSchedule.shootingTime.hour.toString().padLeft(2, '0')}:${workSchedule.shootingTime.minute.toString().padLeft(2, '0')}',
+                                style: const TextStyle(
                                   fontFamily: 'Inter',
                                   color: Color.fromARGB(255, 232, 232, 232),
-                                  fontSize: 12,
+                                  fontSize: 14,
                                 ),
                               ),
                             ),
                           ),
                         ),
-                        const Text(
-                          'Wed, 03/08/2022',
-                          style: TextStyle(
+                        Text(
+                            "Khách hàng: ${workSchedule.customerName} - (${workSchedule.customerPhone})",
+                            style: const TextStyle(
+                              fontFamily: 'Inter',
+                              color: Color(0xFF090F13),
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
+                            )),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 8.0),
+                  Padding(
+                    padding: const EdgeInsetsDirectional.fromSTEB(4, 0, 0, 0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: workSchedule.locations.map((location) {
+                        return Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const Icon(
+                              Icons.location_on_outlined,
+                              color: Color.fromARGB(255, 21, 121, 187),
+                              size: 20.0,
+                            ),
+                            const SizedBox(width: 4),
+                            Text(
+                              "${location.name} (${location.address})",
+                              style: const TextStyle(
+                                fontFamily: 'Inter',
+                                color: Color(0xFF090F13),
+                                fontWeight: FontWeight.normal,
+                                fontSize: 14,
+                              ),
+                              softWrap: true, // Enable text wrapping
+                              overflow: TextOverflow.visible, // Handle overflow
+                            ),
+                          ],
+                        );
+                      }).toList(),
+                    ),
+                  ),
+                  const SizedBox(height: 8.0),
+                  Padding(
+                    padding: const EdgeInsetsDirectional.fromSTEB(4, 0, 0, 0),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const Icon(
+                          Icons.camera_alt_outlined,
+                          color: Color.fromARGB(255, 21, 121, 187),
+                          size: 20.0,
+                        ),
+                        const SizedBox(width: 4),
+                        Text(
+                          "${workSchedule.photographer.name} - ${workSchedule.photographer.phoneNumber}",
+                          style: const TextStyle(
                             fontFamily: 'Inter',
-                            color: Color(0xFF8B97A2),
-                            fontSize: 12,
+                            color: Color(0xFF090F13),
+                            fontWeight: FontWeight.normal,
+                            fontSize: 14,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 8.0),
+                  Padding(
+                    padding: const EdgeInsetsDirectional.fromSTEB(4, 0, 0, 0),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const Icon(
+                          Icons.person_2_outlined,
+                          color: Color.fromARGB(255, 21, 121, 187),
+                          size: 20.0,
+                        ),
+                        const SizedBox(width: 4),
+                        Text(
+                          "${workSchedule.makeupArtist.name} - ${workSchedule.makeupArtist.phoneNumber}",
+                          style: const TextStyle(
+                            fontFamily: 'Inter',
+                            color: Color(0xFF090F13),
+                            fontWeight: FontWeight.normal,
+                            fontSize: 14,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 8.0),
+                  Padding(
+                    padding: const EdgeInsetsDirectional.fromSTEB(4, 0, 0, 0),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const Icon(
+                          Icons.photo_camera_back_outlined,
+                          color: Color.fromARGB(255, 21, 121, 187),
+                          size: 20.0,
+                        ),
+                        const SizedBox(width: 4),
+                        Text(
+                          "${workSchedule.designer.name} - ${workSchedule.designer.phoneNumber}",
+                          style: const TextStyle(
+                            fontFamily: 'Inter',
+                            color: Color(0xFF090F13),
+                            fontWeight: FontWeight.normal,
+                            fontSize: 14,
                           ),
                         ),
                       ],
                     ),
                   ),
                 ],
-              ),
-              Container(
-                width: 50,
-                height: 50,
-                decoration: BoxDecoration(
-                  color: const Color(0xFFF6F6F6),
-                  borderRadius: BorderRadius.circular(8),
-                  shape: BoxShape.rectangle,
-                  border: Border.all(
-                    color: const Color(0xFFE1E2E6),
-                    width: 1,
-                  ),
-                ),
-                alignment: const AlignmentDirectional(0, 0),
-                child: const Icon(
-                  Icons.add_photo_alternate_outlined,
-                  color: Colors.grey,
-                  size: 24,
-                ),
               ),
             ],
           ),

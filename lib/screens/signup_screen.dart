@@ -1,8 +1,12 @@
+// ignore_for_file: library_private_types_in_public_api
+
 import 'package:flutter/material.dart';
 import 'package:webdding/screens/login_screen.dart';
 import 'package:webdding/services/auth/auth_service.dart';
 
 class RegisterScreen extends StatefulWidget {
+  const RegisterScreen({super.key});
+
   @override
   _RegisterScreenState createState() => _RegisterScreenState();
 }
@@ -10,10 +14,10 @@ class RegisterScreen extends StatefulWidget {
 class _RegisterScreenState extends State<RegisterScreen> {
   final AuthService _authService = AuthService(); // Khởi tạo AuthService
 
-  TextEditingController _emailController = TextEditingController();
-  TextEditingController _phoneNumberController = TextEditingController();
-  TextEditingController _fullNameController = TextEditingController();
-  TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _phoneNumberController = TextEditingController();
+  final TextEditingController _fullNameController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
 
   String _errorText = '';
   bool _isLoading = false;
@@ -45,55 +49,55 @@ class _RegisterScreenState extends State<RegisterScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Đăng ký'),
+        title: const Text('Đăng ký'),
         actions: [
           IconButton(
-            icon: Icon(Icons.login), // Icon cho nút "Đăng ký"
+            icon: const Icon(Icons.login), // Icon cho nút "Đăng ký"
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => LoginScreen()),
+                MaterialPageRoute(builder: (context) => const LoginScreen()),
               );
             },
           ),
         ],
       ),
       body: Padding(
-        padding: EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             TextField(
               controller: _emailController,
-              decoration: InputDecoration(labelText: 'Email'),
+              decoration: const InputDecoration(labelText: 'Email'),
             ),
-            SizedBox(height: 16.0),
+            const SizedBox(height: 16.0),
             TextField(
               controller: _phoneNumberController,
-              decoration: InputDecoration(labelText: 'Số điện thoại'),
+              decoration: const InputDecoration(labelText: 'Số điện thoại'),
             ),
-            SizedBox(height: 16.0),
+            const SizedBox(height: 16.0),
             TextField(
               controller: _fullNameController,
-              decoration: InputDecoration(labelText: 'Họ và tên'),
+              decoration: const InputDecoration(labelText: 'Họ và tên'),
             ),
-            SizedBox(height: 16.0),
+            const SizedBox(height: 16.0),
             TextField(
               controller: _passwordController,
               obscureText: true,
-              decoration: InputDecoration(labelText: 'Mật khẩu'),
+              decoration: const InputDecoration(labelText: 'Mật khẩu'),
             ),
-            SizedBox(height: 16.0),
+            const SizedBox(height: 16.0),
             ElevatedButton(
               onPressed: _isLoading ? null : _signUp,
-              child: Text('Đăng ký'),
+              child: const Text('Đăng ký'),
             ),
             if (_errorText.isNotEmpty)
               SizedBox(
                 height: 16.0,
                 child: Text(
                   _errorText,
-                  style: TextStyle(color: Colors.red),
+                  style: const TextStyle(color: Colors.red),
                 ),
               ),
           ],

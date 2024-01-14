@@ -1,28 +1,48 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_redux/flutter_redux.dart';
+import 'package:redux/redux.dart';
+import 'package:webdding/models/redux/appState.dart';
+import 'package:webdding/models/user.dart';
+import 'package:webdding/reducers/app_reducer.dart';
 import 'package:webdding/screens/login_screen.dart'; // Import the firebase_core package
 import 'package:firebase_core/firebase_core.dart';
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized(); // Ensure that Flutter is initialized
+  WidgetsFlutterBinding
+      .ensureInitialized(); // Ensure that Flutter is initialized
   await Firebase.initializeApp(
     options: const FirebaseOptions(
-      apiKey: "AIzaSyBvdP5e6OYm9CnzTrQBsUisnrSMz0nc6WA",
-      appId: "1:998419502613:android:707442e03b4c8e04f6e01c",
-      messagingSenderId: "998419502613",
-      projectId: "webdding-b9b1e",
-    ),); // Initialize Firebase
-  runApp(const MyApp());
+      apiKey: "AIzaSyDeaZ9PWjxNJypt1YW2L2tiQnGj9Abor2U",
+      appId: "1:485677018041:android:8bdcca1ec191c0c582a468",
+      messagingSenderId: "485677018041",
+      projectId: "app-webding",
+    ),
+  ); // Initialize Firebase
+
+  final store = Store<AppState>(
+    appReducer,
+    initialState: AppState(
+        customer:
+            Customer(createdAt: Timestamp.now(), updatedAt: Timestamp.now())),
+  );
+  runApp(MyApp(store: store));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final Store<AppState> store;
+
+  const MyApp({super.key, required this.store});
+  // const MyApp({super.key});
 
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: LoginScreen(), // Đặt LoginScreen làm màn hình chính
-      // Các cấu hình khác của ứng dụng
+    return StoreProvider<AppState>(
+      store: store,
+      child: const MaterialApp(
+        home: LoginScreen(),
+      ),
     );
   }
 }
