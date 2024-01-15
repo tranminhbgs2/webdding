@@ -93,7 +93,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: <Widget>[
-                  Image.asset('images/logo2.png', height: 120), // Logo
+                  Image.asset('images/icons/logo-app.png', height: 120), // Logo
                   const SizedBox(height: 60),
                   const Padding(
                     padding: EdgeInsets.symmetric(horizontal: 32.0),
