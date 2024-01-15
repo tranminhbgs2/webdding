@@ -3,7 +3,6 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:webdding/models/redux/appState.dart';
-import 'package:webdding/models/task.dart';
 import 'package:webdding/models/user.dart';
 import 'package:webdding/models/work_schedule.dart';
 import 'package:webdding/screens/work/add.dart';
@@ -25,7 +24,6 @@ class _HomeScreenState extends State<HomeScreen> {
   final WorkScheduleService _workScheduleService = WorkScheduleService();
   DateTime _selectedDay = DateTime.now();
   DateTime _focusedDay = DateTime.now();
-  List<Task> _filteredTasks = [];
   int _selectedIndex = 0; // Khởi tạo _selectedIndex ở đây
 
   List<WorkSchedule> allWorkSchedules = [];
@@ -74,7 +72,6 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     Map<DateTime, int> taskCounts = _getWorkScheduleCounts(allWorkSchedules);
-    print(allWorkSchedules);
     // Remove the unused variable 'today'
     // DateTime today = DateTime.now();
     return Scaffold(
@@ -140,36 +137,39 @@ class _HomeScreenState extends State<HomeScreen> {
                   int count =
                       taskCounts[DateTime(day.year, day.month, day.day)] ?? 0;
                   bool isToday = isSameDay(day, DateTime.now());
-                  return Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
+                  return Stack(
+                    alignment:
+                        Alignment.center, // Đặt vị trí chính giữa cho Stack
+                    children: [
+                      // Text widget cho hiển thị ngày
+                      Align(
+                        alignment: Alignment.center, // Định vị ở trung tâm
+                        child: Text(
                           '${day.day}',
                           style: TextStyle(
                               color: isToday ? Colors.red : Colors.black),
                         ),
-                        if (count > 0)
-                          Positioned(
-                            bottom: 4,
-                            right: 4,
-                            child: Container(
-                              padding: const EdgeInsets.all(4),
-                              decoration: const BoxDecoration(
-                                color: Colors.blue, // Background color
-                                shape: BoxShape.circle, // Circular shape
-                              ),
-                              child: Text(
-                                '$count',
-                                style: const TextStyle(
-                                  fontSize: 10,
-                                  color: Colors.white,
-                                ),
+                      ),
+                      if (count > 0)
+                        Positioned(
+                          bottom: 2,
+                          right: 5,
+                          child: Container(
+                            padding: const EdgeInsets.all(4),
+                            decoration: const BoxDecoration(
+                              color: Colors.blue, // Background color
+                              shape: BoxShape.circle, // Circular shape
+                            ),
+                            child: Text(
+                              '$count',
+                              style: const TextStyle(
+                                fontSize: 12,
+                                color: Colors.white,
                               ),
                             ),
                           ),
-                      ],
-                    ),
+                        ),
+                    ],
                   );
                 },
                 todayBuilder: (context, date, focusedDay) {
@@ -208,7 +208,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             child: Text(
                               '${todayTasks.length}',
                               style: const TextStyle(
-                                fontSize: 10,
+                                fontSize: 12,
                                 color: Colors.white,
                               ),
                             ),
@@ -217,6 +217,38 @@ class _HomeScreenState extends State<HomeScreen> {
                     ],
                   );
                 },
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'Công việc ngày ${_selectedDay.day}/${_selectedDay.month}/${_selectedDay.year}',
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => const AddWorkScheduleScreen(),
+                        ),
+                      );
+                    },
+                    child: const Text(
+                      'Thêm công việc',
+                      style: TextStyle(
+                        color: Colors.blue,
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
             Expanded(

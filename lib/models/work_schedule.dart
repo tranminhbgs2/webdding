@@ -29,6 +29,15 @@ class WorkSchedule {
   final Customer designer;
   List<Location> locations;
 
+  @override
+  String toString() {
+    // Chuyển đổi TimeOfDay thành chuỗi
+    String formattedShootingTime =
+        '${shootingTime.hour.toString().padLeft(2, '0')}:${shootingTime.minute.toString().padLeft(2, '0')}';
+
+    return 'WorkSchedule(id: $id, locationIds: $locationIds, photographerId: $photographerId, makeupArtistId: $makeupArtistId, designerId: $designerId, shootingDate: $shootingDate, shootingTime: $formattedShootingTime, customerName: $customerName, customerPhone: $customerPhone, customerEmail: $customerEmail, notes: $notes, packagePrice: $packagePrice, makeupPrice: $makeupPrice, designerPrice: $designerPrice, photographerPrice: $photographerPrice, status: $status, createdBy: $createdBy, createdAt: $createdAt, updatedAt: $updatedAt, photographer: ${photographer.toString()}, makeupArtist: ${makeupArtist.toString()}, designer: ${designer.toString()}, locations: ${locations.map((e) => e.toString()).join(', ')})';
+  }
+
   WorkSchedule({
     this.id = '',
     required this.locationIds,
@@ -61,9 +70,9 @@ class WorkSchedule {
   factory WorkSchedule.fromJson(Map<String, dynamic> json, String id) {
     final List<dynamic> locationData = json['locations'] ?? [];
 
-  // Convert the dynamic list to a list of Location objects
-  final List<Location> locations =
-      locationData.map((location) => Location.fromJsonV2(location)).toList();
+    // Convert the dynamic list to a list of Location objects
+    final List<Location> locations =
+        locationData.map((location) => Location.fromJsonV2(location)).toList();
     return WorkSchedule(
       id: id,
       locationIds: json['locationIds'] != null
@@ -94,7 +103,8 @@ class WorkSchedule {
       makeupArtist: Customer.fromJsonV2(json[
           'makeupArtist']), // Chuyển đổi dữ liệu của nhân viên từ Map thành đối tượng Employee
       designer: Customer.fromJsonV2(json['designer']),
-      locations: locations, // Chuyển đổi dữ liệu của nhân viên từ Map thành đối tượng Employee
+      locations:
+          locations, // Chuyển đổi dữ liệu của nhân viên từ Map thành đối tượng Employee
     );
   }
 
