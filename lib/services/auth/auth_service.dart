@@ -1,27 +1,24 @@
 // lib/services/auth_service.dart
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:cloud_firestore/cloud_firestore.dart'; // Add this line
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:webdding/models/user.dart';
 
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  late Future<Customer?> customers;
 
-  Future<bool> signInWithEmailAndPassword(String email, String password) async {
+  Future<bool> signInWithEmailAndPassword(
+      String email, String password, BuildContext context) async {
     try {
       await _auth.signInWithEmailAndPassword(email: email, password: password);
-      FirebaseFirestore.instance.collection('tests').add({
-        'name': 'value1',
-        'status': 'value2',
-        // thêm các trường khác theo nhu cầu
-      }).then((docRef) {
-        // print('Document Added with ID: ${docRef.id}');
-      return true; // Đăng nhập thành công
-      }).catchError((error) {
-        print('Error adding document: $error');
-      return false; // Đăng nhập thành công
-      });
-      return true; // Đăng nhập thành công
+
+      return true;
     } catch (e) {
-      print(e.toString());
+      if (kDebugMode) {
+        print(e.toString());
+      }
       return false; // Đăng nhập thất bại
     }
   }

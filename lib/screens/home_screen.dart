@@ -1,60 +1,119 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_redux/flutter_redux.dart';
+import 'package:redux/redux.dart';
 import 'package:table_calendar/table_calendar.dart';
+import 'package:webdding/models/redux/appState.dart';
 import 'package:webdding/models/task.dart';
+import 'package:webdding/models/user.dart';
+import 'package:webdding/models/work_schedule.dart';
+import 'package:webdding/screens/work/add.dart';
+import 'package:webdding/services/work/work.dart';
 import 'package:webdding/utils/navigation_helper.dart';
 import 'package:webdding/widgets/task_item.dart';
 
 class HomeScreen extends StatefulWidget {
-  final String userEmail; // Thông tin email của người dùng đã đăng nhập
+  // final String userEmail; // Thông tin email của người dùng đã đăng nhập
 
-  HomeScreen({super.key, required this.userEmail});
+  const HomeScreen({super.key});
   @override
+  // ignore: library_private_types_in_public_api
   _HomeScreenState createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
   final CalendarFormat _calendarFormat = CalendarFormat.month;
+  final WorkScheduleService _workScheduleService = WorkScheduleService();
   DateTime _selectedDay = DateTime.now();
   DateTime _focusedDay = DateTime.now();
   List<Task> _filteredTasks = [];
   int _selectedIndex = 0; // Khởi tạo _selectedIndex ở đây
 
+  List<WorkSchedule> allWorkSchedules = [];
+  List<WorkSchedule> _filteredWorkSchedules = [];
+
   @override
   void initState() {
     super.initState();
-    _filteredTasks = _getTasksForDay(_selectedDay);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _fetchWorkSchedulesFromFirestore();
+    });
   }
 
-  Map<DateTime, int> _getTaskCounts(List<Task> tasks) {
-    Map<DateTime, int> taskCounts = {};
-    for (var task in tasks) {
-      // Use only the date part for comparison
-      DateTime dateOnly =
-          DateTime(task.date.year, task.date.month, task.date.day);
+  void _fetchWorkSchedulesFromFirestore() async {
+    try {
+      final store = StoreProvider.of<AppState>(context);
+      final String userCode = store.state.customer?.code ?? '';
+      allWorkSchedules = await _workScheduleService.getListWork(userCode);
+      setState(() {
+        _filteredWorkSchedules = _getWorkSchedulesForDay(_selectedDay);
+      });
+    } catch (e) {
+      print('Error fetching work schedules: $e');
+    }
+  }
 
-      if (taskCounts.containsKey(dateOnly)) {
-        taskCounts[dateOnly] = taskCounts[dateOnly]! + 1;
+  Map<DateTime, int> _getWorkScheduleCounts(List<WorkSchedule> workSchedules) {
+    Map<DateTime, int> workScheduleCounts = {};
+    for (var workSchedule in workSchedules) {
+      DateTime dateOnly = workSchedule.shootingDate;
+      if (workScheduleCounts.containsKey(dateOnly)) {
+        workScheduleCounts[dateOnly] = workScheduleCounts[dateOnly]! + 1;
       } else {
-        taskCounts[dateOnly] = 1;
+        workScheduleCounts[dateOnly] = 1;
       }
     }
-    return taskCounts;
+    return workScheduleCounts;
   }
 
-  List<Task> _getTasksForDay(DateTime day) {
-    return allTasks.where((task) => isSameDay(task.date, day)).toList();
+  List<WorkSchedule> _getWorkSchedulesForDay(DateTime day) {
+    return allWorkSchedules
+        .where((workSchedule) => isSameDay(workSchedule.shootingDate, day))
+        .toList();
   }
 
   @override
   Widget build(BuildContext context) {
-    Map<DateTime, int> taskCounts = _getTaskCounts(allTasks);
-    print(taskCounts.toString());
-    DateTime today = DateTime.now();
+    Map<DateTime, int> taskCounts = _getWorkScheduleCounts(allWorkSchedules);
+    print(allWorkSchedules);
+    // Remove the unused variable 'today'
+    // DateTime today = DateTime.now();
     return Scaffold(
         appBar: AppBar(
-          title: Text(widget.userEmail), // Display user's email
-          backgroundColor: const Color.fromARGB(
-              255, 35, 76, 191), // Set the AppBar color to blue
+          automaticallyImplyLeading: false,
+          title: StoreConnector<AppState, Customer?>(
+            converter: (Store<AppState> store) => store.state.customer,
+            builder: (BuildContext context, Customer? customer) {
+              // Kiểm tra xem customer có phải là null không
+              if (customer != null) {
+                return Text(
+                  "Xin chào, ${customer.name}", // Sử dụng tên của Customer
+                  style: const TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
+                );
+              } else {
+                return const Text("Khách hàng không xác định");
+              }
+            },
+          ), // Display user's email
+          backgroundColor: const Color.fromARGB(255, 35, 76, 191),
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.add, color: Colors.white),
+              color: Colors.white,
+              onPressed: () {
+                // Xử lý khi người dùng nhấn nút "Add Employee" ở đây
+                // Ví dụ: Mở màn hình thêm nhân viên
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => const AddWorkScheduleScreen(),
+                  ),
+                );
+              },
+            ),
+          ],
         ),
         body: Column(
           children: [
@@ -70,7 +129,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 setState(() {
                   _selectedDay = selectedDay;
                   _focusedDay = focusedDay; // update `_focusedDay` here as well
-                  _filteredTasks = _getTasksForDay(selectedDay);
+                  _filteredWorkSchedules = _getWorkSchedulesForDay(selectedDay);
                 });
               },
               onPageChanged: (focusedDay) {
@@ -114,7 +173,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   );
                 },
                 todayBuilder: (context, date, focusedDay) {
-                  List<Task> todayTasks = _getTasksForDay(date);
+                  List<WorkSchedule> todayTasks = _getWorkSchedulesForDay(date);
 
                   return Stack(
                     children: [
@@ -123,7 +182,8 @@ class _HomeScreenState extends State<HomeScreen> {
                         width: 40, // Đặt chiều rộng của hình tròn
                         height: 40, // Đặt chiều cao của hình tròn
                         decoration: const BoxDecoration(
-                          color: Color.fromARGB(255, 159, 150, 241), // Màu sắc cho ngày hiện tại
+                          color: Color.fromARGB(
+                              255, 159, 150, 241), // Màu sắc cho ngày hiện tại
                           shape: BoxShape.circle,
                         ),
                         child: Center(
@@ -161,9 +221,9 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             Expanded(
               child: ListView.builder(
-                itemCount: _filteredTasks.length,
+                itemCount: _filteredWorkSchedules.length,
                 itemBuilder: (context, index) {
-                  return TaskItem(task: _filteredTasks[index]);
+                  return TaskItem(workSchedule: _filteredWorkSchedules[index]);
                 },
               ),
             ),
@@ -177,11 +237,11 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.business),
-              label: 'Quản lý nhân viên',
+              label: 'Nhân viên',
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.location_city),
-              label: 'Quản lý địa điểm chụp',
+              label: 'Địa điểm chụp',
             ),
           ],
           currentIndex: _selectedIndex, // Biến theo dõi mục hiện tại được chọn
@@ -189,10 +249,12 @@ class _HomeScreenState extends State<HomeScreen> {
           unselectedItemColor:
               Colors.grey, // Màu sắc cho các mục chưa được chọn
           onTap: (index) {
-            setState(() {
-              _selectedIndex = index;
-            });
-            NavigationHelper.onItemTapped(context, index, widget.userEmail);
+            if (_selectedIndex != index) {
+              setState(() {
+                _selectedIndex = index;
+              });
+              NavigationHelper.onItemTapped(context, index);
+            }
           }, // Hàm xử lý sự kiện khi chạm vào một mục
           backgroundColor: Colors.white, // Màu nền của BottomNavigationBar
           type: BottomNavigationBarType.fixed, // Kiểu của BottomNavigationBar

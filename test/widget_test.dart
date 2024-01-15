@@ -7,13 +7,16 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:redux/redux.dart';
 
 import 'package:webdding/main.dart';
+import 'package:webdding/models/redux/appState.dart';
+import 'package:webdding/reducers/app_reducer.dart';
 
 void main() {
   testWidgets('Counter increments smoke test', (WidgetTester tester) async {
     // Build our app and trigger a frame.
-    await tester.pumpWidget(const MyApp());
+    await tester.pumpWidget(MyApp(store: Store<AppState>(appReducer, initialState: AppState()),));
 
     // Verify that our counter starts at 0.
     expect(find.text('0'), findsOneWidget);

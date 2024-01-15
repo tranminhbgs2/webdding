@@ -1,46 +1,37 @@
 // lib/screens/login_screen.dart
+// ignore_for_file: library_private_types_in_public_api, use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
+import 'package:webdding/models/redux/appState.dart';
 
 import 'package:webdding/screens/home_screen.dart';
 import 'package:webdding/screens/signup_screen.dart';
 import 'package:webdding/services/auth/auth_service.dart';
+import 'package:flutter_redux/flutter_redux.dart';
+import 'package:webdding/models/user.dart';
+import 'package:webdding/services/employee/employee.dart'; // Add this line
 
 class LoginScreen extends StatefulWidget {
+  const LoginScreen({super.key});
+
   @override
   _LoginScreenState createState() => _LoginScreenState();
 }
 
 void checkAsset() {
   rootBundle.loadString('assets/images/logo.png').then((String contents) {
-    print('Asset exists');
   }).catchError((error) {
-    print('Asset does not exist');
   });
-}
-
-void _showErrorDialog(BuildContext context, String? message) {
-  showDialog(
-    context: context,
-    builder: (ctx) => AlertDialog(
-      title: Text('Lỗi'),
-      content: Text(message ?? 'Đã xảy ra lỗi'),
-      actions: <Widget>[
-        TextButton(
-          child: Text('Đóng'),
-          onPressed: () {
-            Navigator.of(ctx).pop();
-          },
-        ),
-      ],
-    ),
-  );
 }
 
 class _LoginScreenState extends State<LoginScreen> {
   final AuthService _authService = AuthService();
-  final TextEditingController _emailController = TextEditingController( text: "minhtv@gmail.com");
-  final TextEditingController _passwordController = TextEditingController(text: "123456789");
+  final EmployeeService _employeeService = EmployeeService();
+  final TextEditingController _emailController =
+      TextEditingController(text: "minhtv@gmail.com");
+  final TextEditingController _passwordController =
+      TextEditingController(text: "123456789");
   bool _isLoading = false;
   String _errorText = '';
   // Khai báo biến để theo dõi trạng thái ẩn/hiện mật khẩu
@@ -56,14 +47,23 @@ class _LoginScreenState extends State<LoginScreen> {
     final password = _passwordController.text;
 
     final result =
-        await _authService.signInWithEmailAndPassword(email, password);
+        await _authService.signInWithEmailAndPassword(email, password, context);
 
     if (result) {
-      // Đăng nhập thành công, điều hướng đến màn hình chính hoặc màn hình khác
-      Navigator.of(context).pushReplacement(MaterialPageRoute(
-        builder: (context) =>
-            HomeScreen(userEmail: email), // Pass the email here
-      ));
+      Customer? customer = await _employeeService.getEmployeeByEmail(email);
+      if (customer != null) {
+        StoreProvider.of<AppState>(context).dispatch(UpdateCustomerAction(customer));
+        // Đăng nhập thành công, điều hướng đến màn hình chính hoặc màn hình khác
+        Navigator.of(context).pushReplacement(MaterialPageRoute(
+          builder: (context) =>
+              const HomeScreen(), // Pass the email here
+        ));
+      } else {
+        // Đăng nhập thất bại, hiển thị thông báo lỗi
+        setState(() {
+          _errorText = 'Đăng nhập thất bại. Vui lòng kiểm tra lại thông tin!';
+        });
+      }
     } else {
       // Đăng nhập thất bại, hiển thị thông báo lỗi
       setState(() {
@@ -170,7 +170,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     padding: const EdgeInsets.symmetric(horizontal: 32.0),
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        primary: Colors.deepPurple,
+                        backgroundColor: Colors.deepPurple,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(24),
                         ),
@@ -206,7 +206,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => RegisterScreen()),
+                              builder: (context) => const RegisterScreen()),
                         );
                       },
                       child: const Text(

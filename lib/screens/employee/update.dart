@@ -1,4 +1,4 @@
-// ignore_for_file: use_build_context_synchronously, duplicate_ignore
+// ignore_for_file: library_private_types_in_public_api, use_build_context_synchronously, duplicate_ignore
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -10,111 +10,54 @@ import 'package:webdding/services/employee/employee.dart';
 import 'package:webdding/utils/helpers.dart';
 import 'package:webdding/utils/validate.dart';
 
-class AddEmployee extends StatefulWidget {
-  const AddEmployee({super.key});
+class EditEmployee extends StatefulWidget {
+  final Customer employee;
+
+  const EditEmployee({super.key, required this.employee});
 
   @override
-  // ignore: library_private_types_in_public_api
-  _AddEmployeeState createState() => _AddEmployeeState();
+  _EditEmployeeState createState() => _EditEmployeeState();
 }
 
-class _AddEmployeeState extends State<AddEmployee> {
+class _EditEmployeeState extends State<EditEmployee> {
   final EmployeeService _employeeService = EmployeeService();
-
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _name = TextEditingController();
   final TextEditingController _email = TextEditingController();
-  final TextEditingController _password = TextEditingController();
   final TextEditingController _phoneNumber = TextEditingController();
-  String? _selectedValue; // Biến lưu trữ giá trị hiện tại được chọn
-  String? _passwordError;
-  bool _isPasswordValid = false;
+  String? _selectedValue;
   String? _nameError;
-  bool _isNameValid = false;
+  final bool _isNameValid = true;
   String? _emailError;
-  bool _isEmailValid = false;
+  final bool _isEmailValid = true;
   String? _phoneError;
-  bool _isPhoneValid = false;
-  // Thêm các trường thông tin khác nếu cần
-  // Khai báo biến để theo dõi trạng thái ẩn/hiện mật khẩu
-  bool _isPasswordVisible = true;
+  final bool _isPhoneValid = true;
   bool _isLoading = false;
 
   @override
   void initState() {
     super.initState();
-    _password.addListener(() {
-      Future.delayed(const Duration(milliseconds: 50), () {
-        setState(() {
-          _passwordError = validatePassword(_password.text);
-          if (_passwordError == null) {
-            _isPasswordValid = true;
-            _passwordError = null;
-          } else {
-            _isPasswordValid = false;
-          }
-        });
-      });
-    });
-
-    _name.addListener(() {
-      Future.delayed(const Duration(milliseconds: 50), () {
-        setState(() {
-          _nameError = validateNotNull(_name.text);
-          if (_nameError == null) {
-            _isNameValid = true;
-            _nameError = null;
-          } else {
-            _isNameValid = false;
-          }
-        });
-      });
-    });
-
-    _phoneNumber.addListener(() {
-      Future.delayed(const Duration(milliseconds: 50), () {
-        setState(() {
-          _phoneError = validatePhone(_phoneNumber.text);
-          if (_phoneError == null) {
-            _isPhoneValid = true;
-            _phoneError = null;
-          } else {
-            _isPhoneValid = false;
-          }
-        });
-      });
-    });
-
-    _email.addListener(() {
-      Future.delayed(const Duration(milliseconds: 50), () {
-        setState(() {
-          _emailError = validateEmail(_email.text);
-          if (_emailError == null) {
-            _isEmailValid = true;
-          } else {
-            _isEmailValid = false;
-          }
-        });
-      });
-    });
+    _name.text = widget.employee.name;
+    _email.text = widget.employee.email;
+    _phoneNumber.text = widget.employee.phoneNumber;
+    _selectedValue = widget.employee.type;
   }
 
   @override
   void dispose() {
-    _password.dispose();
-    _phoneNumber.dispose();
     _name.dispose();
     _email.dispose();
+    _phoneNumber.dispose();
     super.dispose();
   }
 
   void _submit() async {
     _isLoading = true;
+    // ignore: duplicate_ignore
     if (_formKey.currentState != null && _formKey.currentState!.validate()) {
       // Tạo một đối tượng Employee từ dữ liệu nhập
-
+      
       final store = StoreProvider.of<AppState>(context);
       // Lấy userCode từ store
       final String userCode;
@@ -125,74 +68,64 @@ class _AddEmployeeState extends State<AddEmployee> {
         // Ví dụ: Đặt userCode là một giá trị mặc định hoặc xử lý lỗi
         userCode = '';
       }
-      final newEmployee = Customer(
+      final updatedEmployee = Customer(
+        id: widget.employee.id,
         name: _name.text,
         email: _email.text,
         phoneNumber: _phoneNumber.text,
-        code: getRandomString(6),
+        code: widget.employee.code,
         type: _selectedValue ?? '',
         createBy: userCode,
-        createdAt: Timestamp.now(),
-        updatedAt: Timestamp.now(),
+        createdAt: widget.employee.createdAt,
+        updatedAt: Timestamp.now(), // Cập nhật thời gian
       );
-      // Thêm nhân viên vào Firestore
-      String? result =
-          await _employeeService.addEmployee(newEmployee, _password.text);
 
+      // Cập nhật thông tin nhân viên vào Firestore
+      String? result = await _employeeService.updateEmployee(updatedEmployee);
       bool isRes = false;
-      String mess = "Thêm mới nhân viên thành công";
+      String mess = "Cập nhật thông tin nhân viên thành công";
       if (result == null) {
         isRes = true;
       } else {
-        if (result.contains(
-            "The email address is already in use by another account")) {
-          mess = "Email đã được sử dụng";
-        } else {
-          mess = "Đã có lỗi xảy ra";
-        }
+        mess = "Đã có lỗi xảy ra";
         isRes = false;
       }
 
       // ignore: use_build_context_synchronously
+      setState(() {
+        _isLoading = false;
+      });
       if (isRes) {
         // Sau khi thêm, bạn có thể quay lại màn hình trước đó hoặc thực hiện hành động khác
-        // Future.delayed(const Duration(seconds: 3), () {
+        // Future.delayed(const Duration(seconds: 2), () {
         Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => const CustomerItem()),
         );
         // });
-        setState(() {
-          _isLoading = false;
-        });
       }
       showFlushbar(context, mess, isRes);
-    } else {
-      setState(() {
-        _isLoading = false;
-      });
-      // _formKey.currentState!.reset(); // Reset form nếu có lỗi
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      key: _scaffoldKey, // Đặt GlobalKey cho Scaffold
+      key: _scaffoldKey,
       appBar: AppBar(
-          title: const Text(
-            'Thêm Nhân Viên Mới',
-            style: TextStyle(color: Colors.white),
-          ),
-          backgroundColor: const Color.fromARGB(255, 35, 76, 191),
-          leading: IconButton(
-            icon: const Icon(Icons.arrow_back_ios_new_outlined,
-                color: Colors.white),
-            color: Colors.white,
-            onPressed: () {
-              Navigator.pop(context); // Quay lại màn hình trước đó
-            },
-          )),
+        title: const Text(
+          'Chỉnh Sửa Nhân Viên',
+          style: TextStyle(color: Colors.white),
+        ),
+        backgroundColor: const Color.fromARGB(255, 35, 76, 191),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios_new_outlined, color: Colors.white),
+          color: Colors.white,
+          onPressed: () {
+            Navigator.pop(context); // Quay lại màn hình trước đó
+          },
+        )
+      ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Form(
@@ -205,8 +138,8 @@ class _AddEmployeeState extends State<AddEmployee> {
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(5.0),
                   ),
-                  contentPadding: const EdgeInsets.symmetric(
-                      horizontal: 10.0, vertical: 5.0),
+                  contentPadding:
+                      const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
                 ),
                 child: DropdownButtonHideUnderline(
                   child: DropdownButtonFormField<String>(
@@ -232,25 +165,22 @@ class _AddEmployeeState extends State<AddEmployee> {
                 controller: _name,
                 decoration: InputDecoration(
                   labelText: 'Tên nhân viên*',
-                  hintText: 'Nhập tên của nhân viên', // Gợi ý nếu input trống
-                  prefixIcon: const Icon(Icons.person), // Icon bên trái input
+                  hintText: 'Nhập tên của nhân viên',
+                  prefixIcon: const Icon(Icons.person),
                   errorText: _nameError,
                   border: OutlineInputBorder(
                     borderSide: BorderSide(
                       color: _isNameValid ? Colors.green : Colors.grey,
                     ),
-                  ), // Viền input
+                  ),
                   focusedBorder: OutlineInputBorder(
                     borderSide: BorderSide(
                       color: _isNameValid ? Colors.green : Colors.blue,
                     ),
                   ),
-
                   errorBorder: OutlineInputBorder(
                     borderSide: BorderSide(
-                        color: _isNameValid
-                            ? Colors.green
-                            : Colors.red), // Màu viền khi có lỗi
+                        color: _isNameValid ? Colors.green : Colors.red),
                   ),
                 ),
                 validator: validateNotNull,
@@ -260,25 +190,22 @@ class _AddEmployeeState extends State<AddEmployee> {
                 controller: _email,
                 decoration: InputDecoration(
                   labelText: 'Email*',
-                  hintText: 'Nhập email', // Gợi ý nếu input trống
-                  prefixIcon: const Icon(Icons.email), // Icon bên trái input
+                  hintText: 'Nhập email',
+                  prefixIcon: const Icon(Icons.email),
                   errorText: _emailError,
                   border: OutlineInputBorder(
                     borderSide: BorderSide(
                       color: _isEmailValid ? Colors.green : Colors.grey,
                     ),
-                  ), // Viền input
+                  ),
                   focusedBorder: OutlineInputBorder(
                     borderSide: BorderSide(
                       color: _isEmailValid ? Colors.green : Colors.blue,
                     ),
                   ),
-
                   errorBorder: OutlineInputBorder(
                     borderSide: BorderSide(
-                        color: _isEmailValid
-                            ? Colors.green
-                            : Colors.red), // Màu viền khi có lỗi
+                        color: _isEmailValid ? Colors.green : Colors.red),
                   ),
                 ),
                 validator: validateEmail,
@@ -288,78 +215,32 @@ class _AddEmployeeState extends State<AddEmployee> {
                 controller: _phoneNumber,
                 decoration: InputDecoration(
                   labelText: 'Số Điện Thoại*',
-                  hintText: 'Nhập số điện thoại', // Gợi ý nếu input trống
-                  prefixIcon: const Icon(Icons.phone), // Icon bên trái input
+                  hintText: 'Nhập số điện thoại',
+                  prefixIcon: const Icon(Icons.phone),
                   errorText: _phoneError,
                   border: OutlineInputBorder(
                     borderSide: BorderSide(
                       color: _isPhoneValid ? Colors.green : Colors.grey,
                     ),
-                  ), // Viền input
+                  ),
                   focusedBorder: OutlineInputBorder(
                     borderSide: BorderSide(
                       color: _isPhoneValid ? Colors.green : Colors.blue,
                     ),
                   ),
-
                   errorBorder: OutlineInputBorder(
                     borderSide: BorderSide(
-                        color: _isPhoneValid
-                            ? Colors.green
-                            : Colors.red), // Màu viền khi có lỗi
+                        color: _isPhoneValid ? Colors.green : Colors.red),
                   ),
                 ),
                 validator: validatePhone,
-              ),
-              const SizedBox(height: 16.0),
-              TextFormField(
-                controller: _password,
-                obscureText: _isPasswordVisible,
-                decoration: InputDecoration(
-                  labelText: 'Mật khẩu*',
-                  hintText: 'Nhập mật khẩu',
-                  prefixIcon: const Icon(Icons.password), // Icon bên trái input
-                  errorText: _passwordError,
-                  border: OutlineInputBorder(
-                    borderSide: BorderSide(
-                      color: _isPasswordValid ? Colors.green : Colors.grey,
-                    ),
-                  ), // Viền input
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(
-                      color: _isPasswordValid ? Colors.green : Colors.blue,
-                    ),
-                  ),
-
-                  errorBorder: OutlineInputBorder(
-                    borderSide: BorderSide(
-                        color: _isPasswordValid
-                            ? Colors.green
-                            : Colors.red), // Màu viền khi có lỗi
-                  ),
-                  suffixIcon: IconButton(
-                    // Sử dụng IconButton để thay đổi trạng thái ẩn/hiện mật khẩu
-                    icon: Icon(
-                      _isPasswordVisible
-                          ? Icons.visibility_off
-                          : Icons.visibility,
-                    ),
-                    onPressed: () {
-                      setState(() {
-                        _isPasswordVisible = !_isPasswordVisible;
-                      });
-                    },
-                  ),
-                ),
-                validator: validatePassword,
               ),
               const SizedBox(height: 24),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 32.0),
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    // ignore: deprecated_member_use
-                    primary: Colors.blueAccent,
+                    backgroundColor: Colors.blueAccent,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(15),
                     ),
@@ -367,7 +248,7 @@ class _AddEmployeeState extends State<AddEmployee> {
                   ),
                   onPressed: _isLoading ? null : _submit,
                   child: const Text(
-                    'Thêm mới',
+                    'Cập Nhật',
                     style: TextStyle(
                       fontSize: 18,
                       color: Colors.white,
