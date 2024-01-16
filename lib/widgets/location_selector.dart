@@ -17,7 +17,7 @@ class LocationSelector extends StatefulWidget {
 }
 
 class _LocationSelectorState extends State<LocationSelector> {
-  List<String> _selectedLocationIds = [''];
+  final List<String> _selectedLocationIds = [''];
   final LocationService __locationService = LocationService();
   Future<List<Location>> _getAllLocaltion() async {
     // Add a return statement at the end of the method
@@ -40,7 +40,7 @@ class _LocationSelectorState extends State<LocationSelector> {
     return FutureBuilder<List<Location>>(
       future: _getAllLocaltion(),
       builder: (context, snapshot) {
-        if (!snapshot.hasData) return CircularProgressIndicator();
+        if (!snapshot.hasData) return const CircularProgressIndicator();
         var locations = snapshot.data!;
         // Thêm một mục trống hoặc mục mặc định
         // if (_selectedLocationIds[index].isEmpty && locations.isNotEmpty) {
@@ -86,7 +86,7 @@ class _LocationSelectorState extends State<LocationSelector> {
             if (index >
                 0) // Nút xóa chỉ hiển thị khi không phải là mục đầu tiên
               IconButton(
-                icon: Icon(Icons.remove_circle_outline),
+                icon: const Icon(Icons.remove_circle_outline),
                 onPressed: () {
                   setState(() {
                     _selectedLocationIds.removeAt(index);

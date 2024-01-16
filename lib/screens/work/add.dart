@@ -276,8 +276,9 @@ class _AddWorkScheduleScreenState extends State<AddWorkScheduleScreen> {
                       child: FutureBuilder<List<Customer>>(
                         future: employeeMakeup,
                         builder: (context, snapshot) {
-                          if (!snapshot.hasData)
+                          if (!snapshot.hasData) {
                             return const CircularProgressIndicator();
+                          }
                           var empMakeup = snapshot.data!;
                           return InputDecorator(
                             decoration: InputDecoration(
@@ -346,8 +347,9 @@ class _AddWorkScheduleScreenState extends State<AddWorkScheduleScreen> {
                       child: FutureBuilder<List<Customer>>(
                         future: employeePhoto,
                         builder: (context, snapshot) {
-                          if (!snapshot.hasData)
+                          if (!snapshot.hasData) {
                             return const CircularProgressIndicator();
+                          }
                           var empMakeup = snapshot.data!;
                           return InputDecorator(
                             decoration: InputDecoration(
@@ -416,8 +418,9 @@ class _AddWorkScheduleScreenState extends State<AddWorkScheduleScreen> {
                       child: FutureBuilder<List<Customer>>(
                         future: employeeDesigner,
                         builder: (context, snapshot) {
-                          if (!snapshot.hasData)
+                          if (!snapshot.hasData) {
                             return const CircularProgressIndicator();
+                          }
                           var empMakeup = snapshot.data!;
                           return InputDecorator(
                             decoration: InputDecoration(
@@ -516,7 +519,7 @@ class _AddWorkScheduleScreenState extends State<AddWorkScheduleScreen> {
                       child: ListTile(
                         title: Text(
                             "Ngày chụp: ${DateFormat('yyyy-MM-dd').format(_selectedDate)}"),
-                        trailing: Icon(Icons.calendar_today),
+                        trailing: const Icon(Icons.calendar_today),
                         onTap: () async {
                           final DateTime? pickedDate = await showDatePicker(
                             context: context,
@@ -538,7 +541,7 @@ class _AddWorkScheduleScreenState extends State<AddWorkScheduleScreen> {
                       child: ListTile(
                         title:
                             Text("Giờ chụp: ${_selectedTime.format(context)}"),
-                        trailing: Icon(Icons.access_time),
+                        trailing: const Icon(Icons.access_time),
                         onTap: () async {
                           final TimeOfDay? pickedTime = await showTimePicker(
                             context: context,

@@ -23,7 +23,7 @@ class LocationItem extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         child: Container(
           width: double.infinity,
-          height: 100,
+          height: 120,
           decoration: BoxDecoration(
             color: Colors.white,
             boxShadow: const [
