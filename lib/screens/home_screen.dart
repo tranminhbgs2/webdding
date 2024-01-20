@@ -46,7 +46,7 @@ class _HomeScreenState extends State<HomeScreen> {
         _filteredWorkSchedules = _getWorkSchedulesForDay(_selectedDay);
       });
     } catch (e) {
-      print('Error fetching work schedules: $e');
+      // print('Error fetching work schedules: $e');
     }
   }
 
@@ -252,12 +252,23 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
             Expanded(
-              child: ListView.builder(
-                itemCount: _filteredWorkSchedules.length,
-                itemBuilder: (context, index) {
-                  return TaskItem(workSchedule: _filteredWorkSchedules[index]);
-                },
-              ),
+              child: _filteredWorkSchedules.isEmpty
+                  ? const Center(
+                      child: Text(
+                        'Không có lịch làm việc',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    )
+                  : ListView.builder(
+                      itemCount: _filteredWorkSchedules.length,
+                      itemBuilder: (context, index) {
+                        return TaskItem(
+                            workSchedule: _filteredWorkSchedules[index]);
+                      },
+                    ),
             ),
           ],
         ),

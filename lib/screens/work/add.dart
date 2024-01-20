@@ -1,4 +1,4 @@
-// ignore_for_file: library_private_types_in_public_api
+// ignore_for_file: library_private_types_in_public_api, use_build_context_synchronously
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
@@ -243,7 +243,6 @@ class _AddWorkScheduleScreenState extends State<AddWorkScheduleScreen> {
 
   void _handleSelectedLocationsChange(List<String> selectedLocations) {
     setState(() {
-      print("Selected locations: $selectedLocations");
       _selectedLocations = selectedLocations;
     });
   }

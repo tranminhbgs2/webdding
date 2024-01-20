@@ -29,9 +29,9 @@ class _LoginScreenState extends State<LoginScreen> {
   final AuthService _authService = AuthService();
   final EmployeeService _employeeService = EmployeeService();
   final TextEditingController _emailController =
-      TextEditingController(text: "minhtv@gmail.com");
+      TextEditingController(text: "admin@gmail.com");
   final TextEditingController _passwordController =
-      TextEditingController(text: "123456789");
+      TextEditingController(text: "123456");
   bool _isLoading = false;
   String _errorText = '';
   // Khai báo biến để theo dõi trạng thái ẩn/hiện mật khẩu

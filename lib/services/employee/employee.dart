@@ -166,7 +166,7 @@ class EmployeeService {
 
       // Use a query to filter documents by email
       QuerySnapshot querySnapshot = await employeesCollection
-          .where(FieldPath.documentId, isNotEqualTo: id)
+          .where(FieldPath.documentId, isEqualTo: id)
           .limit(1)
           .get();
 

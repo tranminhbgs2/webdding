@@ -13,6 +13,7 @@ class AuthService {
       String email, String password, BuildContext context) async {
     try {
       await _auth.signInWithEmailAndPassword(email: email, password: password);
+      // Đăng nhập thành công, bạn có thể truy cập thông tin người dùng từ userCredential.user
 
       return true;
     } catch (e) {

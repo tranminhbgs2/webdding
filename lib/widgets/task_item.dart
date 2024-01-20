@@ -13,7 +13,7 @@ class TaskItem extends StatelessWidget {
         Padding(
       padding: const EdgeInsetsDirectional.fromSTEB(16, 0, 16, 12),
       child: Container(
-        width: 100,
+        width: double.infinity,
         decoration: BoxDecoration(
           color: Colors.white,
           boxShadow: const [
@@ -36,17 +36,6 @@ class TaskItem extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Padding(
-                  //   padding: const EdgeInsetsDirectional.fromSTEB(4, 0, 0, 0),
-                  //   child: Text(
-                  //       "Khách hàng: ${workSchedule.customerName} - (${workSchedule.customerPhone})",
-                  //       style: const TextStyle(
-                  //         fontFamily: 'Inter',
-                  //         color: Color(0xFF090F13),
-                  //         fontWeight: FontWeight.bold,
-                  //         fontSize: 16,
-                  //       )),
-                  // ),
                   const SizedBox(height: 8.0),
                   Padding(
                     padding: const EdgeInsetsDirectional.fromSTEB(0, 4, 0, 0),
@@ -77,14 +66,54 @@ class TaskItem extends StatelessWidget {
                             ),
                           ),
                         ),
-                        Text(
-                            "Khách hàng: ${workSchedule.customerName} - (${workSchedule.customerPhone})",
+                        Padding(
+                          padding:
+                              const EdgeInsetsDirectional.fromSTEB(0, 0, 8, 0),
+                          child: Container(
+                            width: 300, // Điều chỉnh chiều rộng tùy ý
+                            child: Text(
+                              workSchedule.customerName,
+                              style: const TextStyle(
+                                fontFamily: 'Inter',
+                                color: Color(0xFF090F13),
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16,
+                              ),
+                              overflow: TextOverflow
+                                  .ellipsis, // Hiển thị "..." nếu quá dài
+                              maxLines: 2, // Giới hạn số dòng thành 1
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 8.0),
+                  Padding(
+                    padding: const EdgeInsetsDirectional.fromSTEB(4, 0, 0, 0),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const Icon(
+                          Icons.phone_outlined,
+                          color: Color.fromARGB(255, 21, 121, 187),
+                          size: 20.0,
+                        ),
+                        const SizedBox(width: 4),
+                        Flexible(
+                          // Use Flexible to allow text to wrap automatically
+                          child: Text(
+                            workSchedule.customerPhone,
                             style: const TextStyle(
                               fontFamily: 'Inter',
                               color: Color(0xFF090F13),
-                              fontWeight: FontWeight.bold,
-                              fontSize: 16,
-                            )),
+                              fontWeight: FontWeight.normal,
+                              fontSize: 14,
+                            ),
+                            softWrap: true, // Enable text wrapping
+                            overflow: TextOverflow.visible, // Handle overflow
+                          ),
+                        ),
                       ],
                     ),
                   ),
@@ -103,16 +132,20 @@ class TaskItem extends StatelessWidget {
                               size: 20.0,
                             ),
                             const SizedBox(width: 4),
-                            Text(
-                              "${location.name} (${location.address})",
-                              style: const TextStyle(
-                                fontFamily: 'Inter',
-                                color: Color(0xFF090F13),
-                                fontWeight: FontWeight.normal,
-                                fontSize: 14,
+                            Flexible(
+                              // Use Flexible to allow text to wrap automatically
+                              child: Text(
+                                location.name,
+                                style: const TextStyle(
+                                  fontFamily: 'Inter',
+                                  color: Color(0xFF090F13),
+                                  fontWeight: FontWeight.normal,
+                                  fontSize: 14,
+                                ),
+                                softWrap: true, // Enable text wrapping
+                                overflow:
+                                    TextOverflow.visible, // Handle overflow
                               ),
-                              softWrap: true, // Enable text wrapping
-                              overflow: TextOverflow.visible, // Handle overflow
                             ),
                           ],
                         );
@@ -131,13 +164,18 @@ class TaskItem extends StatelessWidget {
                           size: 20.0,
                         ),
                         const SizedBox(width: 4),
-                        Text(
-                          "${workSchedule.photographer.name} - ${workSchedule.photographer.phoneNumber}",
-                          style: const TextStyle(
-                            fontFamily: 'Inter',
-                            color: Color(0xFF090F13),
-                            fontWeight: FontWeight.normal,
-                            fontSize: 14,
+                        Flexible(
+                          // Use Flexible to allow text to wrap automatically
+                          child: Text(
+                            "${workSchedule.photographer.name} - ${workSchedule.photographer.phoneNumber}",
+                            style: const TextStyle(
+                              fontFamily: 'Inter',
+                              color: Color(0xFF090F13),
+                              fontWeight: FontWeight.normal,
+                              fontSize: 14,
+                            ),
+                            softWrap: true, // Enable text wrapping
+                            overflow: TextOverflow.visible, // Handle overflow
                           ),
                         ),
                       ],
