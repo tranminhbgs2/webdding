@@ -23,28 +23,6 @@ class WorkScheduleService {
     }
   }
 
-  // Phương thức để lấy danh sách lịch làm việc
-  // Future<List<WorkSchedule>> getListWork(String createBy) async {
-  //   try {
-  //     final QuerySnapshot querySnapshot = await workCollection.get();
-  //     if (querySnapshot.docs.isEmpty) {
-  //       // Nếu không có tài liệu nào, trả về danh sách rỗng
-  //       return [];
-  //     }
-  //     final List<WorkSchedule> employees = querySnapshot.docs.map((doc) {
-  //       final data = doc.data() as Map<String, dynamic>;
-  //       final id = doc.id; // Lấy trường id của tài liệu
-  //       return WorkSchedule.fromJson(data, id);
-  //     }).toList();
-
-  //     return employees;
-  //   } catch (e) {
-  //     if (kDebugMode) {
-  //       print('Error fetching employees: $e');
-  //     }
-  //     return [];
-  //   }
-  // }
   Future<List<WorkSchedule>> getListWork(String createBy) async {
     try {
       final QuerySnapshot querySnapshot =
@@ -72,19 +50,8 @@ class WorkScheduleService {
   Future<String?> updateWork(WorkSchedule work) async {
     try {
       if (await isWorkUniqueById(work.createdBy, work.id)) {
-        await workCollection.doc(work.id).update({
-          'customerEmail': work.customerEmail,
-          'customerName': work.customerName,
-          'customerPhone': work.customerPhone,
-          'locationIds': work.locationIds,
-          'makeupArtistId': work.makeupArtistId,
-          'photographerId': work.photographerId,
-          'shootingDate': work.shootingDate,
-          'shootingTime': work.shootingTime,
-          'status': work.status,
-          'createBy': work.createdBy,
-          'updated_at': Timestamp.now(),
-        });
+        await workCollection.doc(work.id).update(work
+            .toJson()); // Sử dụng toJson() để chuyển đổi WorkSchedule thành Map
       } else {
         return "Không thấy thông tin";
       }

@@ -19,14 +19,16 @@ import 'package:webdding/utils/validate.dart';
 import 'package:webdding/widgets/location_selector.dart';
 // Thêm các import cần thiết khác tại đây
 
-class AddWorkScheduleScreen extends StatefulWidget {
-  const AddWorkScheduleScreen({super.key});
+class UpdateWorkScheduleScreen extends StatefulWidget {
+  final WorkSchedule workSchedule;
+  const UpdateWorkScheduleScreen({super.key, required this.workSchedule});
 
   @override
-  _AddWorkScheduleScreenState createState() => _AddWorkScheduleScreenState();
+  _UpdateWorkScheduleScreenState createState() =>
+      _UpdateWorkScheduleScreenState();
 }
 
-class _AddWorkScheduleScreenState extends State<AddWorkScheduleScreen> {
+class _UpdateWorkScheduleScreenState extends State<UpdateWorkScheduleScreen> {
   final _formKey = GlobalKey<FormState>();
   final EmployeeService _employeeService = EmployeeService();
   final WorkScheduleService __workScheduleService = WorkScheduleService();
@@ -58,74 +60,92 @@ class _AddWorkScheduleScreenState extends State<AddWorkScheduleScreen> {
   String? _selectedMakeupArtistId;
   String? _selectedDesignerId;
 
-  String? _designerPriceError;
-  bool _isdesignerPriceValid = false;
-  String? _packagePriceError;
-  bool _ispackagePriceValid = false;
-  String? _makeupPriceError;
-  bool _ismakeupPriceValid = false;
-  String? _photographyPriceError;
-  bool _isphotographyPriceValid = false;
+  // String? _designerPriceError;
+  // bool _isdesignerPriceValid = false;
+  // String? _packagePriceError;
+  // bool _ispackagePriceValid = false;
+  // String? _makeupPriceError;
+  // bool _ismakeupPriceValid = false;
+  // String? _photographyPriceError;
+  // bool _isphotographyPriceValid = false;
   // Thêm các trường thông tin khác nếu cần
   bool _isLoading = false;
 
   @override
   void initState() {
     super.initState();
+      _customerNameController.text = widget.workSchedule.customerName;
+      _customerPhoneController.text = widget.workSchedule.customerPhone;
+      _customerEmailController.text = widget.workSchedule.customerEmail;
+      _notesController.text = widget.workSchedule.notes;
+      _packagePriceController.text =
+          widget.workSchedule.packagePrice.toString();
+      _makeupPriceController.text = widget.workSchedule.makeupPrice.toString();
+      _photographyPriceController.text =
+          widget.workSchedule.photographerPrice.toString();
+      _designerPriceController.text =
+          widget.workSchedule.designerPrice.toString();
+      _selectedDate = widget.workSchedule.shootingDate;
+      _selectedTime = widget.workSchedule.shootingTime;
+      _selectedLocations = widget.workSchedule.locationIds;
+      _selectedPhotographerId = widget.workSchedule.photographerId;
+      _selectedMakeupArtistId = widget.workSchedule.makeupArtistId;
+      _selectedDesignerId = widget.workSchedule.designerId;
+      // Thêm các khởi tạo khác nếu cần
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _getAllLocaltion();
     });
 
-    _designerPriceController.addListener(() {
-      Future.delayed(const Duration(milliseconds: 50), () {
-        setState(() {
-          _designerPriceError = validateNotNull(_designerPriceController.text);
-          if (_designerPriceError == null) {
-            _isdesignerPriceValid = true;
-            _designerPriceError = null;
-          } else {
-            _isdesignerPriceValid = false;
-          }
-        });
-      });
-    });
-    _packagePriceController.addListener(() {
-      setState(() {
-        _packagePriceError = validateNotNull(_packagePriceController.text);
-        if (_packagePriceError == null) {
-          _ispackagePriceValid = true;
-        } else {
-          _ispackagePriceValid = false;
-        }
-      });
-    });
-    _photographyPriceController.addListener(() {
-      Future.delayed(const Duration(milliseconds: 50), () {
-        setState(() {
-          _photographyPriceError =
-              validateNotNull(_photographyPriceController.text);
-          if (_photographyPriceError == null) {
-            _isphotographyPriceValid = true;
-            _photographyPriceError = null;
-          } else {
-            _isphotographyPriceValid = false;
-          }
-        });
-      });
-    });
-    _makeupPriceController.addListener(() {
-      Future.delayed(const Duration(milliseconds: 50), () {
-        setState(() {
-          _makeupPriceError = validateNotNull(_makeupPriceController.text);
-          if (_makeupPriceError == null) {
-            _ismakeupPriceValid = true;
-            _makeupPriceError = null;
-          } else {
-            _ismakeupPriceValid = false;
-          }
-        });
-      });
-    });
+    // _designerPriceController.addListener(() {
+    //   Future.delayed(const Duration(milliseconds: 50), () {
+    //     setState(() {
+    //       _designerPriceError = validateNotNull(_designerPriceController.text);
+    //       if (_designerPriceError == null) {
+    //         _isdesignerPriceValid = true;
+    //         _designerPriceError = null;
+    //       } else {
+    //         _isdesignerPriceValid = false;
+    //       }
+    //     });
+    //   });
+    // });
+    // _packagePriceController.addListener(() {
+    //   setState(() {
+    //     _packagePriceError = validateNotNull(_packagePriceController.text);
+    //     if (_packagePriceError == null) {
+    //       _ispackagePriceValid = true;
+    //     } else {
+    //       _ispackagePriceValid = false;
+    //     }
+    //   });
+    // });
+    // _photographyPriceController.addListener(() {
+    //   Future.delayed(const Duration(milliseconds: 50), () {
+    //     setState(() {
+    //       _photographyPriceError =
+    //           validateNotNull(_photographyPriceController.text);
+    //       if (_photographyPriceError == null) {
+    //         _isphotographyPriceValid = true;
+    //         _photographyPriceError = null;
+    //       } else {
+    //         _isphotographyPriceValid = false;
+    //       }
+    //     });
+    //   });
+    // });
+    // _makeupPriceController.addListener(() {
+    //   Future.delayed(const Duration(milliseconds: 50), () {
+    //     setState(() {
+    //       _makeupPriceError = validateNotNull(_makeupPriceController.text);
+    //       if (_makeupPriceError == null) {
+    //         _ismakeupPriceValid = true;
+    //         _makeupPriceError = null;
+    //       } else {
+    //         _ismakeupPriceValid = false;
+    //       }
+    //     });
+    //   });
+    // });
   }
 
   @override
@@ -206,12 +226,13 @@ class _AddWorkScheduleScreenState extends State<AddWorkScheduleScreen> {
         photographer: photographer ?? Customer(),
         makeupArtist: makeupArtist ?? Customer(),
         designer: designer ?? Customer(),
+        id: widget.workSchedule.id,
       );
       // Thêm nhân viên vào Firestore
-      String? result = await __workScheduleService.addWorkSchedule(newWork);
+      String? result = await __workScheduleService.updateWork(newWork);
 
       bool isRes = false;
-      String mess = "Thêm mới lịch làm việc thành công";
+      String mess = "Cập nhật lịch làm việc thành công";
       if (result == null) {
         isRes = true;
       } else {
@@ -251,19 +272,19 @@ class _AddWorkScheduleScreenState extends State<AddWorkScheduleScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          'Thêm mới lịch làm việc',
-          style: TextStyle(color: Colors.white),
-        ),
-        backgroundColor: const Color.fromARGB(255, 35, 76, 191),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new_outlined, color: Colors.white),
-          color: Colors.white,
-          onPressed: () {
-            Navigator.pop(context); // Quay lại màn hình trước đó
-          },
-        )
-      ),
+          title: const Text(
+            'Thêm mới lịch làm việc',
+            style: TextStyle(color: Colors.white),
+          ),
+          backgroundColor: const Color.fromARGB(255, 35, 76, 191),
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back_ios_new_outlined,
+                color: Colors.white),
+            color: Colors.white,
+            onPressed: () {
+              Navigator.pop(context); // Quay lại màn hình trước đó
+            },
+          )),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -277,7 +298,7 @@ class _AddWorkScheduleScreenState extends State<AddWorkScheduleScreen> {
                 // Thêm DatePicker và TimePicker cho việc chọn ngày và giờ
                 // ... các trường nhập liệu khác ...
                 LocationSelector(
-                    onSelectedLocationsChanged: _handleSelectedLocationsChange, selectedLocationIds: const [''],),
+                    onSelectedLocationsChanged: _handleSelectedLocationsChange, selectedLocationIds: _selectedLocations,),
                 // ... các trường nhập liệu và nút lưu khác ...
                 const SizedBox(height: 16.0),
                 Row(
@@ -329,19 +350,18 @@ class _AddWorkScheduleScreenState extends State<AddWorkScheduleScreen> {
                           FilteringTextInputFormatter
                               .digitsOnly, // Chỉ cho phép nhập số
                         ],
-                        decoration: InputDecoration(
+                        decoration: const InputDecoration(
                           labelText: 'Giá Makeup*',
                           hintText: 'Nhập giá tiền', // Gợi ý nếu input trống
 
-                          prefixIcon: const Icon(Icons
+                          prefixIcon: Icon(Icons
                               .price_change_outlined), // Icon bên trái input
-                          errorText: _makeupPriceError, 
-                          border: const OutlineInputBorder(
+                          border: OutlineInputBorder(
                             borderSide: BorderSide(
                               color: Colors.grey,
                             ),
                           ), // Viền input
-                          focusedBorder: const OutlineInputBorder(
+                          focusedBorder: OutlineInputBorder(
                             borderSide: BorderSide(
                               color: Colors.blue,
                             ),
@@ -401,18 +421,17 @@ class _AddWorkScheduleScreenState extends State<AddWorkScheduleScreen> {
                           FilteringTextInputFormatter
                               .digitsOnly, // Chỉ cho phép nhập số
                         ],
-                        decoration: InputDecoration(
+                        decoration: const InputDecoration(
                           labelText: 'Giá chụp ảnh*',
                           hintText: 'Nhập giá', // Gợi ý nếu input trống
-                          prefixIcon: const Icon(Icons
+                          prefixIcon: Icon(Icons
                               .price_change_outlined), // Icon bên trái input
-                          errorText: _photographyPriceError, 
-                          border: const OutlineInputBorder(
+                          border: OutlineInputBorder(
                             borderSide: BorderSide(
                               color: Colors.grey,
                             ),
                           ), // Viền input
-                          focusedBorder: const OutlineInputBorder(
+                          focusedBorder: OutlineInputBorder(
                             borderSide: BorderSide(
                               color: Colors.blue,
                             ),
@@ -473,17 +492,17 @@ class _AddWorkScheduleScreenState extends State<AddWorkScheduleScreen> {
                           FilteringTextInputFormatter
                               .digitsOnly, // Chỉ cho phép nhập số
                         ],
-                        decoration: InputDecoration(
+                        decoration: const InputDecoration(
                           labelText: 'Giá chỉnh sửa ảnh*',
                           hintText: 'Nhập giá', // Gợi ý nếu input trống
-                          prefixIcon: const Icon(Icons.price_change_outlined),
-                          errorText: _designerPriceError, 
-                          border: const OutlineInputBorder(
+                          prefixIcon: Icon(Icons.price_change_outlined),
+                          // errorText: _designerPriceError, // Icon bên trái input
+                          border: OutlineInputBorder(
                             borderSide: BorderSide(
                               color: Colors.grey,
                             ),
                           ), // Viền input
-                          focusedBorder: const OutlineInputBorder(
+                          focusedBorder: OutlineInputBorder(
                             borderSide: BorderSide(
                               color: Colors.blue,
                             ),
@@ -502,24 +521,24 @@ class _AddWorkScheduleScreenState extends State<AddWorkScheduleScreen> {
                     FilteringTextInputFormatter
                         .digitsOnly, // Chỉ cho phép nhập số
                   ],
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     labelText: 'Giá gói chụp*',
                     hintText: 'Nhập giá', // Gợi ý nếu input trống
                     prefixIcon:
-                        const Icon(Icons.email_outlined), // Icon bên trái input
-                    errorText: _packagePriceError,
-                    border: const OutlineInputBorder(
+                        Icon(Icons.email_outlined), // Icon bên trái input
+                    // errorText: _packagePriceError,
+                    border: OutlineInputBorder(
                       borderSide: BorderSide(
                         color: Colors.grey,
                       ),
                     ), // Viền input
-                    focusedBorder: const OutlineInputBorder(
+                    focusedBorder: OutlineInputBorder(
                       borderSide: BorderSide(
                         color: Colors.blue,
                       ),
                     ),
 
-                    errorBorder: const OutlineInputBorder(
+                    errorBorder: OutlineInputBorder(
                       borderSide: BorderSide(color: Colors.red),
                     ),
                   ),
@@ -674,7 +693,7 @@ class _AddWorkScheduleScreenState extends State<AddWorkScheduleScreen> {
                     ),
                     onPressed: _isLoading ? null : _submit,
                     child: const Text(
-                      'Thêm mới',
+                      'Cập nhật',
                       style: TextStyle(
                         fontSize: 18,
                         color: Colors.white,

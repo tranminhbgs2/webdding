@@ -33,8 +33,8 @@ class Location {
       phone: json['phone'] ?? '',
       userCode: json['userCode'] ?? '',
       status: json['status'] ?? '',
-      createdAt: json['created_at'] ?? '',
-      updatedAt: json['updated_at'] ?? '',
+      createdAt: json['createdAt'] ?? Timestamp.now(),
+      updatedAt: json['updatedAt'] ?? Timestamp.now(),
     );
   }
 

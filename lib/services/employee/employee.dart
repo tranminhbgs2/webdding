@@ -14,22 +14,8 @@ class EmployeeService {
         // Email là duy nhất, tiếp tục thêm mới nhân viên
         // Thực hiện thêm mới dữ liệu vào Firestore ở đây
         // Ví dụ sử dụng Firebase Firestor
-        Timestamp createdAt = Timestamp.now();
         // Customer(name: name, email: email)
-        employeesCollection.add({
-          // Fix this line
-          'email': employee.email,
-          'code': employee.code,
-          'phoneNumber': employee.phoneNumber,
-          'fullName': employee.fullName,
-          'name': employee.name,
-          "type": employee.type,
-          'rule': "STAFF",
-          'status': ACTIVATED,
-          'createBy': employee.createBy,
-          'created_at': createdAt,
-          'updated_at': createdAt,
-        }).then((docRef) {
+        employeesCollection.add(employee.toJson()).then((docRef) {
           if (kDebugMode) {
             print('Document Added with ID: ${docRef.id}');
           }
@@ -79,14 +65,7 @@ class EmployeeService {
   Future<String?> updateEmployee(Customer employee) async {
     try {
       if (await isEmailUniqueById(employee.email, employee.id)) {
-        await employeesCollection.doc(employee.id).update({
-          'name': employee.name,
-          'email': employee.email,
-          'phoneNumber': employee.phoneNumber,
-          'type': employee.type,
-          'createBy': employee.createBy,
-          'updated_at': Timestamp.now(),
-        });
+        await employeesCollection.doc(employee.id).update(employee.toJson());
       } else {
         return "Email đã tồn tại";
       }

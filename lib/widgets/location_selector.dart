@@ -10,16 +10,21 @@ import 'package:webdding/utils/validate.dart';
 
 class LocationSelector extends StatefulWidget {
   final Function(List<String>) onSelectedLocationsChanged;
+  final List<String> selectedLocationIds;
 
-  const LocationSelector({Key? key, required this.onSelectedLocationsChanged})
-      : super(key: key);
+  LocationSelector({super.key, required this.onSelectedLocationsChanged, required this.selectedLocationIds});
 
   @override
   _LocationSelectorState createState() => _LocationSelectorState();
 }
 
 class _LocationSelectorState extends State<LocationSelector> {
-  final List<String> _selectedLocationIds = [''];
+  List<String> _selectedLocationIds = [];
+  @override
+  void initState() {
+    super.initState();
+    _selectedLocationIds = widget.selectedLocationIds;
+  }
   final LocationService __locationService = LocationService();
   Future<List<Location>> _getAllLocaltion() async {
     // Add a return statement at the end of the method

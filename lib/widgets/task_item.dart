@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:webdding/models/work_schedule.dart';
+import 'package:webdding/screens/work/detail.dart';
 
 class TaskItem extends StatelessWidget {
   // final Task task;
@@ -9,7 +10,17 @@ class TaskItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return // Generated code for this Container Widget...
+    return InkWell(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            // builder: (context) => EmployeeDetailScreen(customer: employee),
+            builder: (context) => WorkScheduleDetailScreen(workSchedule: workSchedule),
+          ),
+        );
+      },
+      child: // Generated code for this Container Widget...
         Padding(
       padding: const EdgeInsetsDirectional.fromSTEB(16, 0, 16, 12),
       child: Container(
@@ -235,6 +246,7 @@ class TaskItem extends StatelessWidget {
           ),
         ),
       ),
+    ),
     );
   }
 }

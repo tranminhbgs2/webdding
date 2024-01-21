@@ -28,6 +28,8 @@ class _AddEmployeeState extends State<AddEmployee> {
   final TextEditingController _email = TextEditingController();
   final TextEditingController _password = TextEditingController();
   final TextEditingController _phoneNumber = TextEditingController();
+  final TextEditingController _salary = TextEditingController(text: '0');
+  final TextEditingController _bonus = TextEditingController(text: '0');
   String? _selectedValue; // Biến lưu trữ giá trị hiện tại được chọn
   String? _passwordError;
   bool _isPasswordValid = false;
@@ -132,6 +134,9 @@ class _AddEmployeeState extends State<AddEmployee> {
         code: getRandomString(6),
         type: _selectedValue ?? '',
         createBy: userCode,
+        rule: "STAFF",
+        salary: double.tryParse(_salary.text) ?? 0.0,
+        bonus: double.tryParse(_bonus.text) ?? 0.0,
         createdAt: Timestamp.now(),
         updatedAt: Timestamp.now(),
       );
@@ -352,6 +357,61 @@ class _AddEmployeeState extends State<AddEmployee> {
                   ),
                 ),
                 validator: validatePassword,
+              ),
+              const SizedBox(height: 16.0),
+              TextFormField(
+                controller: _salary,
+                keyboardType: TextInputType.number,
+                decoration: const InputDecoration(
+                  labelText: 'Lương cơ bản',
+                  hintText: 'Nhập lương cơ bản', // Gợi ý nếu input trống
+                  prefixIcon: Icon(Icons.monetization_on_outlined),
+                  border: OutlineInputBorder(
+                    borderSide: BorderSide(
+                      color: Colors.grey,
+                    ),
+                  ), // Viền input
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+                      color: Colors.blue,
+                    ),
+                  ),
+                ),
+                validator: (value) {
+                  double? intValue = double.tryParse(value!);
+                  if (intValue == null || intValue < 0) {
+                    return 'Giá trị không hợp lệ. Vui lòng nhập số.';
+                  }
+                  return null;
+                },
+              ),
+              const SizedBox(height: 16.0),
+              TextFormField(
+                controller: _bonus,
+                keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                maxLength: 3,
+                decoration: const InputDecoration(
+                  labelText: 'Hoa hồng (%)',
+                  hintText: 'Nhập % hoa hồng', // Gợi ý nếu input trống
+                  prefixIcon: Icon(Icons.money), // Icon bên trái input
+                  border: OutlineInputBorder(
+                    borderSide: BorderSide(
+                      color: Colors.grey,
+                    ),
+                  ), // Viền input
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+                      color: Colors.blue,
+                    ),
+                  ),
+                ),
+                validator: (value) {
+                  double? intValue = double.tryParse(value!);
+                  if (intValue == null || intValue < 0 || intValue > 100) {
+                    return 'Giá trị không hợp lệ. Vui lòng nhập số từ 0 đến 100.';
+                  }
+                  return null;
+                },
               ),
               const SizedBox(height: 24),
               Padding(

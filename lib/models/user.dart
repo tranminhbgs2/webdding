@@ -13,6 +13,8 @@ class Customer {
   String type;
   String status;
   String createBy;
+  double salary;
+  double bonus;
   Timestamp createdAt;
   Timestamp updatedAt;
 
@@ -28,6 +30,8 @@ class Customer {
     this.rule = '',
     this.type = '',
     this.createBy = '',
+    this.salary = 0,
+    this.bonus = 0,
     this.status = ACTIVATED,
     Timestamp? createdAt,
     Timestamp? updatedAt,
@@ -46,8 +50,10 @@ class Customer {
       type: json['type'] ?? '',
       status: json['status'] ?? '',
       createBy: json['createBy'] ?? '',
-      createdAt: json['created_at'] ?? '',
-      updatedAt: json['updated_at'] ?? '',
+      salary: json['salary'] ?? 0,
+      bonus: json['bonus'] ?? 0,
+      createdAt: json['createdAt'] ?? Timestamp.now(),
+      updatedAt: json['updatedAt'] ?? Timestamp.now(),
     );
   }
 
@@ -62,6 +68,8 @@ class Customer {
       type: json['type'] ?? '',
       status: json['status'] ?? '',
       createBy: json['createBy'] ?? '',
+      salary: json['salary'] ?? 0,
+      bonus: json['bonus'] ?? 0,
       createdAt: json['created_at'] ?? Timestamp.now(),
       updatedAt: json['updated_at'] ?? Timestamp.now(),
     );
@@ -78,6 +86,8 @@ class Customer {
       'rule': rule,
       'type': type,
       'status': status,
+      'salary': salary,
+      'bonus': bonus,
       'createBy': createBy,
       'createdAt': createdAt,
       'updatedAt': updatedAt,
@@ -97,5 +107,5 @@ List<DropdownItem> dropdownItems = [
   DropdownItem(value: 'PHOTO', display: 'Thợ ảnh'),
   DropdownItem(value: 'DESIGNER', display: 'Thợ chỉnh sửa ảnh'),
   DropdownItem(value: 'LETAN', display: 'Lễ tân'),
-  // DropdownItem(value: 'option3', display: 'Tùy Chọn 3'),
+  DropdownItem(value: 'CSKH', display: 'CSKH'),
 ];
