@@ -2,3 +2,10 @@
 
 const ACTIVATED = 'ACTIVATED';
 const INACTIVATED = 'INACTIVATED';
+const MAKEUP = 'MAKEUP';
+const PHOTO = 'PHOTO';
+const DESIGNER = 'DESIGNER';
+const LETAN = 'LETAN';
+const CSKH = 'CSKH';
+const STAFF = 'STAFF';
+const ADMIN = 'ADMIN';

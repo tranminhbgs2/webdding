@@ -93,6 +93,24 @@ class Customer {
       'updatedAt': updatedAt,
     };
   }
+  factory Customer.empty() {
+    return Customer(
+      id: '',
+      code: '',
+      name: '',
+      email: '',
+      phoneNumber: '',
+      fullName: '',
+      rule: '',
+      type: '',
+      createBy: '',
+      salary: 0,
+      bonus: 0,
+      status: 'ACTIVATED', // Hoặc một giá trị mặc định phù hợp
+      createdAt: Timestamp.now(),
+      updatedAt: Timestamp.now(),
+    );
+  }
 }
 
 class DropdownItem {

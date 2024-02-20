@@ -2,7 +2,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:webdding/models/user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:webdding/utils/constant.dart';
 
 class EmployeeService {
   final FirebaseAuth _auth = FirebaseAuth.instance;

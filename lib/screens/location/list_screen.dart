@@ -19,6 +19,7 @@ class ListLocation extends StatefulWidget {
 class _ListLocationState extends State<ListLocation> {
   final LocationService __locationService = LocationService();
   Future<List<Location>> locations = Future.value([]);
+  List<BottomNavigationBarItem> _navBarItems = [];
 
   @override
   void initState() {
@@ -26,6 +27,7 @@ class _ListLocationState extends State<ListLocation> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _getAll();
     });
+    _loadNavBarItems();
   }
 
   Future<void> _getAll() async {
@@ -47,6 +49,15 @@ class _ListLocationState extends State<ListLocation> {
 
   int _selectedIndex = 2;
 
+  Future<void> _loadNavBarItems() async {
+    var items = await NavigationHelper.buildBottomNavBarItems();
+    if(items.length > 0) {
+      _selectedIndex = items.length - 1;
+    }
+    setState(() {
+      _navBarItems = items;
+    });
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -99,20 +110,7 @@ class _ListLocationState extends State<ListLocation> {
           },
         ),
         bottomNavigationBar: BottomNavigationBar(
-          items: const <BottomNavigationBarItem>[
-            BottomNavigationBarItem(
-              icon: Icon(Icons.home),
-              label: 'Home',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.business),
-              label: 'Nhân viên',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.location_city),
-              label: 'Địa điểm chụp',
-            ),
-          ],
+          items: _navBarItems,
           currentIndex: _selectedIndex, // Biến theo dõi mục hiện tại được chọn
           selectedItemColor: Colors.amber[800], // Màu sắc cho mục được chọn
           unselectedItemColor:

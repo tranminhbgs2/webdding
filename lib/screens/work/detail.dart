@@ -49,19 +49,24 @@ class WorkScheduleDetailScreen extends StatelessWidget {
               ]),
               _buildDetailSection('Đội Ngũ', [
                 _buildDetailRow(
-                    'Người Chụp Ảnh', "${workSchedule.photographer.name} - ${workSchedule.photographer.phoneNumber}"),
+                    'Chụp Ảnh', "${workSchedule.photographer.name} - ${workSchedule.photographer.phoneNumber}"),
                 _buildDetailRow(
-                    'Người Trang Điểm',"${workSchedule.makeupArtist.name} - ${workSchedule.makeupArtist.phoneNumber}"),
-                _buildDetailRow('Người Thiết Kế', "${workSchedule.designer.name} - ${workSchedule.designer.phoneNumber}"),
+                    'Makeup',"${workSchedule.makeupArtist.name} - ${workSchedule.makeupArtist.phoneNumber}"),
+                _buildDetailRow('Photo', "${workSchedule.designer.name} - ${workSchedule.designer.phoneNumber}"),
+                if (workSchedule.cskh.name.isNotEmpty)
+                _buildDetailRow('CSKH', "${workSchedule.cskh.name} - ${workSchedule.cskh.phoneNumber}"),
               ]),
               _buildDetailSection('Chi Phí', [
                 _buildDetailRow(
-                    'Giá Gói', formatPrice(workSchedule.packagePrice)),
+                    'Giá Gói Chụp', formatPrice(workSchedule.packagePrice)),
                 _buildDetailRow(
                     'Giá Makeup', formatPrice(workSchedule.makeupPrice)),
-                _buildDetailRow('Giá Nhà Thiết Kế',
+                _buildDetailRow('Giá Photo',
                     formatPrice(workSchedule.designerPrice)),
-                _buildDetailRow('Giá Người Chụp Ảnh',
+                _buildDetailRow('Giá Chụp Ảnh',
+                    formatPrice(workSchedule.photographerPrice)),
+                if (workSchedule.cskh.name.isNotEmpty)
+                _buildDetailRow('Hoa Hồng CSKH',
                     formatPrice(workSchedule.photographerPrice)),
               ]),
               _buildDetailSection('Khác', [

@@ -20,9 +20,10 @@ class LoginScreen extends StatefulWidget {
 }
 
 void checkAsset() {
-  rootBundle.loadString('assets/images/logo.png').then((String contents) {
-  }).catchError((error) {
-  });
+  rootBundle
+      .loadString('assets/images/logo.png')
+      .then((String contents) {})
+      .catchError((error) {});
 }
 
 class _LoginScreenState extends State<LoginScreen> {
@@ -52,11 +53,12 @@ class _LoginScreenState extends State<LoginScreen> {
     if (result) {
       Customer? customer = await _employeeService.getEmployeeByEmail(email);
       if (customer != null) {
-        StoreProvider.of<AppState>(context).dispatch(UpdateCustomerAction(customer));
+        await _authService.saveUserRole(customer.rule);
+        StoreProvider.of<AppState>(context)
+            .dispatch(UpdateCustomerAction(customer));
         // Đăng nhập thành công, điều hướng đến màn hình chính hoặc màn hình khác
         Navigator.of(context).pushReplacement(MaterialPageRoute(
-          builder: (context) =>
-              const HomeScreen(), // Pass the email here
+          builder: (context) => const HomeScreen(), // Pass the email here
         ));
       } else {
         // Đăng nhập thất bại, hiển thị thông báo lỗi
@@ -93,7 +95,8 @@ class _LoginScreenState extends State<LoginScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: <Widget>[
-                  Image.asset('assets/images/icons/logo-app.png', height: 120), // Logo
+                  Image.asset('assets/images/icons/logo-app.png',
+                      height: 120), // Logo
                   const SizedBox(height: 60),
                   const Padding(
                     padding: EdgeInsets.symmetric(horizontal: 32.0),

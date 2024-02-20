@@ -96,6 +96,7 @@ class _EditLocationState extends State<EditLocation> {
         description: _description.text,
         userCode: userCode,
         createdAt: widget.location.createdAt,
+        status: widget.location.status,
         updatedAt: Timestamp.now(), // Cập nhật thời gian
       );
 
@@ -180,10 +181,10 @@ class _EditLocationState extends State<EditLocation> {
               TextFormField(
                 controller: _address,
                 decoration: InputDecoration(
-                  labelText: 'Vị trí*',
+                  labelText: 'Vị trí',
                   hintText: 'Nhập vị trí',
                   prefixIcon: const Icon(Icons.location_on_outlined),
-                  errorText: _addressError,
+                  // errorText: _addressError,
                   border: OutlineInputBorder(
                     borderSide: BorderSide(
                       color: _isAddressValid ? Colors.green : Colors.grey,
@@ -199,7 +200,7 @@ class _EditLocationState extends State<EditLocation> {
                         color: _isAddressValid ? Colors.green : Colors.red),
                   ),
                 ),
-                validator: validateNotNull,
+                // validator: validateNotNull,
               ),
               const SizedBox(height: 16.0),
               TextFormField(

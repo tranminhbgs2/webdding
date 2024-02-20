@@ -37,6 +37,7 @@ class _UpdateWorkScheduleScreenState extends State<UpdateWorkScheduleScreen> {
   Future<List<Customer>> employeePhoto = Future.value([]);
   Future<List<Customer>> employeeMakeup = Future.value([]);
   Future<List<Customer>> employeeDesigner = Future.value([]);
+  Future<List<Customer>> employeeCskh = Future.value([]);
 
   // Controllers cho các trường nhập liệu
   final TextEditingController _customerNameController = TextEditingController();
@@ -51,6 +52,7 @@ class _UpdateWorkScheduleScreenState extends State<UpdateWorkScheduleScreen> {
       TextEditingController();
   final TextEditingController _designerPriceController =
       TextEditingController();
+  final TextEditingController _cskhPriceController = TextEditingController();
 
   DateTime _selectedDate = DateTime.now();
   TimeOfDay _selectedTime = TimeOfDay.now();
@@ -59,15 +61,18 @@ class _UpdateWorkScheduleScreenState extends State<UpdateWorkScheduleScreen> {
   String? _selectedPhotographerId;
   String? _selectedMakeupArtistId;
   String? _selectedDesignerId;
+  String? _selectedCskhId;
 
-  // String? _designerPriceError;
-  // bool _isdesignerPriceValid = false;
-  // String? _packagePriceError;
-  // bool _ispackagePriceValid = false;
-  // String? _makeupPriceError;
-  // bool _ismakeupPriceValid = false;
-  // String? _photographyPriceError;
-  // bool _isphotographyPriceValid = false;
+  String? _designerPriceError;
+  bool _isdesignerPriceValid = false;
+  String? _packagePriceError;
+  bool _ispackagePriceValid = false;
+  String? _makeupPriceError;
+  bool _ismakeupPriceValid = false;
+  String? _photographyPriceError;
+  bool _isphotographyPriceValid = false;
+  String? _cskhPriceError;
+  bool _iscskhPriceValid = false;
   // Thêm các trường thông tin khác nếu cần
   bool _isLoading = false;
 
@@ -85,67 +90,85 @@ class _UpdateWorkScheduleScreenState extends State<UpdateWorkScheduleScreen> {
           widget.workSchedule.photographerPrice.toString();
       _designerPriceController.text =
           widget.workSchedule.designerPrice.toString();
+      _cskhPriceController.text =
+          widget.workSchedule.cskh.toString();
+      _cskhPriceController.text =
+          widget.workSchedule.cskhPrice.toString();
       _selectedDate = widget.workSchedule.shootingDate;
       _selectedTime = widget.workSchedule.shootingTime;
       _selectedLocations = widget.workSchedule.locationIds;
       _selectedPhotographerId = widget.workSchedule.photographerId;
       _selectedMakeupArtistId = widget.workSchedule.makeupArtistId;
       _selectedDesignerId = widget.workSchedule.designerId;
+      _selectedCskhId = widget.workSchedule.cskhId;
       // Thêm các khởi tạo khác nếu cần
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _getAllLocaltion();
     });
 
-    // _designerPriceController.addListener(() {
-    //   Future.delayed(const Duration(milliseconds: 50), () {
-    //     setState(() {
-    //       _designerPriceError = validateNotNull(_designerPriceController.text);
-    //       if (_designerPriceError == null) {
-    //         _isdesignerPriceValid = true;
-    //         _designerPriceError = null;
-    //       } else {
-    //         _isdesignerPriceValid = false;
-    //       }
-    //     });
-    //   });
-    // });
-    // _packagePriceController.addListener(() {
-    //   setState(() {
-    //     _packagePriceError = validateNotNull(_packagePriceController.text);
-    //     if (_packagePriceError == null) {
-    //       _ispackagePriceValid = true;
-    //     } else {
-    //       _ispackagePriceValid = false;
-    //     }
-    //   });
-    // });
-    // _photographyPriceController.addListener(() {
-    //   Future.delayed(const Duration(milliseconds: 50), () {
-    //     setState(() {
-    //       _photographyPriceError =
-    //           validateNotNull(_photographyPriceController.text);
-    //       if (_photographyPriceError == null) {
-    //         _isphotographyPriceValid = true;
-    //         _photographyPriceError = null;
-    //       } else {
-    //         _isphotographyPriceValid = false;
-    //       }
-    //     });
-    //   });
-    // });
-    // _makeupPriceController.addListener(() {
-    //   Future.delayed(const Duration(milliseconds: 50), () {
-    //     setState(() {
-    //       _makeupPriceError = validateNotNull(_makeupPriceController.text);
-    //       if (_makeupPriceError == null) {
-    //         _ismakeupPriceValid = true;
-    //         _makeupPriceError = null;
-    //       } else {
-    //         _ismakeupPriceValid = false;
-    //       }
-    //     });
-    //   });
-    // });
+    _designerPriceController.addListener(() {
+      Future.delayed(const Duration(milliseconds: 50), () {
+        setState(() {
+          _designerPriceError = validateNotNull(_designerPriceController.text);
+          if (_designerPriceError == null) {
+            _isdesignerPriceValid = true;
+            _designerPriceError = null;
+          } else {
+            _isdesignerPriceValid = false;
+          }
+        });
+      });
+    });
+    _packagePriceController.addListener(() {
+      setState(() {
+        _packagePriceError = validateNotNull(_packagePriceController.text);
+        if (_packagePriceError == null) {
+          _ispackagePriceValid = true;
+        } else {
+          _ispackagePriceValid = false;
+        }
+      });
+    });
+    _photographyPriceController.addListener(() {
+      Future.delayed(const Duration(milliseconds: 50), () {
+        setState(() {
+          _photographyPriceError =
+              validateNotNull(_photographyPriceController.text);
+          if (_photographyPriceError == null) {
+            _isphotographyPriceValid = true;
+            _photographyPriceError = null;
+          } else {
+            _isphotographyPriceValid = false;
+          }
+        });
+      });
+    });
+    _makeupPriceController.addListener(() {
+      Future.delayed(const Duration(milliseconds: 50), () {
+        setState(() {
+          _makeupPriceError = validateNotNull(_makeupPriceController.text);
+          if (_makeupPriceError == null) {
+            _ismakeupPriceValid = true;
+            _makeupPriceError = null;
+          } else {
+            _ismakeupPriceValid = false;
+          }
+        });
+      });
+    });
+    _cskhPriceController.addListener(() {
+      Future.delayed(const Duration(milliseconds: 50), () {
+        setState(() {
+          _cskhPriceError = validateNotNull(_cskhPriceController.text);
+          if (_cskhPriceError == null) {
+            _iscskhPriceValid = true;
+            _cskhPriceError = null;
+          } else {
+            _iscskhPriceValid = false;
+          }
+        });
+      });
+    });
   }
 
   @override
@@ -158,6 +181,7 @@ class _UpdateWorkScheduleScreenState extends State<UpdateWorkScheduleScreen> {
     _designerPriceController.dispose();
     _photographyPriceController.dispose();
     _makeupPriceController.dispose();
+    _cskhPriceController.dispose();
     super.dispose();
   }
 
@@ -172,16 +196,21 @@ class _UpdateWorkScheduleScreenState extends State<UpdateWorkScheduleScreen> {
       final List<Customer> fetchedemployeePhoto =
           await _employeeService.getByType(userCode, 'PHOTO', ACTIVATED);
 
+      final List<Customer> fetchedemployeeCskh =
+          await _employeeService.getByType(userCode, 'CSKH', ACTIVATED);
+
       setState(() {
         employeePhoto = Future.value(fetchedemployeePhoto);
         employeeMakeup = Future.value(fetchedemployeeMakeup);
         employeeDesigner = Future.value(fetchedemployeDesigner);
+        employeeCskh = Future.value(fetchedemployeeCskh);
       });
     } catch (e) {
       setState(() {
         employeeMakeup = Future.value([]);
         employeePhoto = Future.value([]);
         employeeDesigner = Future.value([]);
+        employeeCskh = Future.value([]);
       });
     }
   }
@@ -202,16 +231,20 @@ class _UpdateWorkScheduleScreenState extends State<UpdateWorkScheduleScreen> {
           await _employeeService.getEmployeeById(_selectedDesignerId);
       final List<Location> location =
           await __workScheduleService.getLocationsByIds(_selectedLocations);
+      final Customer? cskh =
+          await _employeeService.getEmployeeById(_selectedCskhId);
 
       final newWork = WorkSchedule(
         locationIds: _selectedLocations,
         photographerId: _selectedPhotographerId ?? '',
         makeupArtistId: _selectedMakeupArtistId ?? '',
         designerId: _selectedDesignerId ?? '',
+        cskhId: _selectedCskhId ?? '',
         packagePrice: double.tryParse(_packagePriceController.text) ?? 0.0,
         makeupPrice: double.tryParse(_makeupPriceController.text) ?? 0.0,
         designerPrice: double.tryParse(_designerPriceController.text) ?? 0.0,
         photographerPrice: double.tryParse(_packagePriceController.text) ?? 0.0,
+        cskhPrice: double.tryParse(_cskhPriceController.text) ?? 0.0,
         shootingDate: _selectedDate,
         shootingTime: _selectedTime,
         customerName: _customerNameController.text,
@@ -226,6 +259,7 @@ class _UpdateWorkScheduleScreenState extends State<UpdateWorkScheduleScreen> {
         photographer: photographer ?? Customer(),
         makeupArtist: makeupArtist ?? Customer(),
         designer: designer ?? Customer(),
+        cskh: cskh ?? Customer(),
         id: widget.workSchedule.id,
       );
       // Thêm nhân viên vào Firestore
@@ -503,6 +537,76 @@ class _UpdateWorkScheduleScreenState extends State<UpdateWorkScheduleScreen> {
                             ),
                           ), // Viền input
                           focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: Colors.blue,
+                            ),
+                          ),
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+                const SizedBox(height: 16.0),
+                Row(
+                  children: <Widget>[
+                    Expanded(
+                      child: FutureBuilder<List<Customer>>(
+                        future: employeeCskh,
+                        builder: (context, snapshot) {
+                          if (!snapshot.hasData) {
+                            return const CircularProgressIndicator();
+                          }
+                          var empMakeup = snapshot.data!;
+                          return InputDecorator(
+                            decoration: InputDecoration(
+                              labelText: "CSKH*",
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(5.0),
+                              ),
+                              contentPadding: const EdgeInsets.symmetric(
+                                  horizontal: 10.0, vertical: 5.0),
+                            ),
+                            child: DropdownButtonFormField<String>(
+                              validator: validateNotNull,
+                              value: _selectedCskhId,
+                              items: empMakeup.map((Customer employee) {
+                                return DropdownMenuItem<String>(
+                                  value: employee.id,
+                                  child: Text(
+                                      "${employee.name} (${employee.code})"),
+                                );
+                              }).toList(),
+                              onChanged: (String? newValue) {
+                                setState(() {
+                                  _selectedCskhId = newValue;
+                                });
+                              },
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                    const SizedBox(width: 10.0),
+                    Expanded(
+                      child: TextFormField(
+                        controller: _cskhPriceController,
+                        keyboardType: TextInputType.number,
+                        validator: validateNotNull,
+                        inputFormatters: <TextInputFormatter>[
+                          FilteringTextInputFormatter
+                              .digitsOnly, // Chỉ cho phép nhập số
+                        ],
+                        decoration: InputDecoration(
+                          labelText: 'Hoa hồng*',
+                          hintText: 'Nhập hoa hồng', // Gợi ý nếu input trống
+                          prefixIcon: const Icon(Icons.price_change_outlined),
+                          errorText: _cskhPriceError,
+                          border: const OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: Colors.grey,
+                            ),
+                          ), // Viền input
+                          focusedBorder: const OutlineInputBorder(
                             borderSide: BorderSide(
                               color: Colors.blue,
                             ),

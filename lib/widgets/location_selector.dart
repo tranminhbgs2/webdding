@@ -12,7 +12,10 @@ class LocationSelector extends StatefulWidget {
   final Function(List<String>) onSelectedLocationsChanged;
   final List<String> selectedLocationIds;
 
-  LocationSelector({super.key, required this.onSelectedLocationsChanged, required this.selectedLocationIds});
+  LocationSelector(
+      {super.key,
+      required this.onSelectedLocationsChanged,
+      required this.selectedLocationIds});
 
   @override
   _LocationSelectorState createState() => _LocationSelectorState();
@@ -23,8 +26,9 @@ class _LocationSelectorState extends State<LocationSelector> {
   @override
   void initState() {
     super.initState();
-    _selectedLocationIds = widget.selectedLocationIds;
+    _selectedLocationIds = List.from(widget.selectedLocationIds);
   }
+
   final LocationService __locationService = LocationService();
   Future<List<Location>> _getAllLocaltion() async {
     // Add a return statement at the end of the method
@@ -39,6 +43,27 @@ class _LocationSelectorState extends State<LocationSelector> {
       return Future.value([]);
     }
     // return [];
+  }
+
+  void _handleAddLocation() {
+    setState(() {
+      _selectedLocationIds.add('');
+    });
+    widget.onSelectedLocationsChanged(List.from(_selectedLocationIds));
+  }
+
+  void _handleRemoveLocation(int index) {
+    setState(() {
+      _selectedLocationIds.removeAt(index);
+    });
+    widget.onSelectedLocationsChanged(List.from(_selectedLocationIds));
+  }
+
+  void _handleLocationChanged(int index, String? newValue) {
+    setState(() {
+      _selectedLocationIds[index] = newValue ?? '';
+    });
+    widget.onSelectedLocationsChanged(List.from(_selectedLocationIds));
   }
 
   // ... Phương thức _buildLocationSelector và _fetchLocations giữ nguyên ...
@@ -70,23 +95,19 @@ class _LocationSelectorState extends State<LocationSelector> {
                     ),
                     child: DropdownButtonHideUnderline(
                       child: DropdownButtonFormField<String>(
-                        value: _selectedLocationIds[index].isEmpty
-                            ? null
-                            : _selectedLocationIds[index],
-                            validator: validateNotNull,
-                        items: locations.map((Location location) {
-                          return DropdownMenuItem<String>(
-                            value: location.id,
-                            child: Text(location.name),
-                          );
-                        }).toList(),
-                        onChanged: (String? newValue) {
-                          setState(() {
-                            _selectedLocationIds[index] = newValue ?? '';
-                            widget.onSelectedLocationsChanged(_selectedLocationIds);
-                          });
-                        },
-                      ),
+                          value: _selectedLocationIds[index].isEmpty
+                              ? null
+                              : _selectedLocationIds[index],
+                          validator: validateNotNull,
+                          items: locations.map((Location location) {
+                            return DropdownMenuItem<String>(
+                              value: location.id,
+                              child: Text(location.name),
+                            );
+                          }).toList(),
+                          onChanged: (String? newValue) {
+                            _handleLocationChanged(index, newValue);
+                          }),
                     ),
                   )),
             ),
@@ -94,11 +115,7 @@ class _LocationSelectorState extends State<LocationSelector> {
                 0) // Nút xóa chỉ hiển thị khi không phải là mục đầu tiên
               IconButton(
                 icon: const Icon(Icons.remove_circle_outline),
-                onPressed: () {
-                  setState(() {
-                    _selectedLocationIds.removeAt(index);
-                  });
-                },
+                onPressed: () => _handleRemoveLocation(index),
               ),
             const SizedBox(height: 16.0),
           ],
@@ -132,12 +149,7 @@ class _LocationSelectorState extends State<LocationSelector> {
                 ),
                 padding: const EdgeInsets.all(16), // Padding trong nút
               ),
-              onPressed: () {
-                setState(() {
-                  _selectedLocationIds.add(''); // Thêm một lựa chọn mới
-                });
-                widget.onSelectedLocationsChanged(_selectedLocationIds);
-              },
+              onPressed: _handleAddLocation,
               child: const Text(
                 'Thêm địa điểm', // Text hiển thị trên nút
                 style: TextStyle(

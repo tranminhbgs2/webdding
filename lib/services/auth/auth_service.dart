@@ -4,9 +4,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:webdding/models/user.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:webdding/services/employee/employee.dart';
 
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  final EmployeeService _employeeService = EmployeeService();
   late Future<Customer?> customers;
 
   Future<bool> signInWithEmailAndPassword(
@@ -49,5 +52,19 @@ class AuthService {
     } catch (error) {
       return 'Đã xảy ra lỗi: $error'; // Trả về thông báo lỗi nếu có lỗi
     }
+  }
+
+  User? getCurrentUser() {
+    return _auth.currentUser;
+  }
+
+  Future<void> saveUserRole(String role) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString('user_role', role);
+  }
+
+  Future<String?> getUserRoleFromPrefs() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getString('user_role');
   }
 }

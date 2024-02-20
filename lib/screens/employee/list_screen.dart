@@ -18,6 +18,7 @@ class CustomerItem extends StatefulWidget {
 class _CustomerItemState extends State<CustomerItem> {
   final EmployeeService _employeeService = EmployeeService();
   Future<List<Customer>> customers= Future.value([]);
+  List<BottomNavigationBarItem> _navBarItems = [];
 
   @override
   void initState() {
@@ -25,6 +26,7 @@ class _CustomerItemState extends State<CustomerItem> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _getAll();
     });
+    _loadNavBarItems();
   }
 
 
@@ -47,6 +49,12 @@ class _CustomerItemState extends State<CustomerItem> {
 
   int _selectedIndex = 1;
 
+  Future<void> _loadNavBarItems() async {
+    var items = await NavigationHelper.buildBottomNavBarItems();
+    setState(() {
+      _navBarItems = items;
+    });
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -101,20 +109,7 @@ class _CustomerItemState extends State<CustomerItem> {
           },
         ),
         bottomNavigationBar: BottomNavigationBar(
-          items: const <BottomNavigationBarItem>[
-            BottomNavigationBarItem(
-              icon: Icon(Icons.home),
-              label: 'Home',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.business),
-              label: 'Nhân viên',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.location_city),
-              label: 'Địa điểm chụp',
-            ),
-          ],
+          items: _navBarItems,
           currentIndex: _selectedIndex, // Biến theo dõi mục hiện tại được chọn
           selectedItemColor: Colors.amber[800], // Màu sắc cho mục được chọn
           unselectedItemColor:

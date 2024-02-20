@@ -7,6 +7,7 @@ import 'package:webdding/models/user.dart';
 import 'package:webdding/models/work_schedule.dart';
 import 'package:webdding/screens/work/add.dart';
 import 'package:webdding/services/work/work.dart';
+import 'package:webdding/utils/constant.dart';
 import 'package:webdding/utils/navigation_helper.dart';
 import 'package:webdding/widgets/task_item.dart';
 
@@ -22,12 +23,14 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   final CalendarFormat _calendarFormat = CalendarFormat.month;
   final WorkScheduleService _workScheduleService = WorkScheduleService();
+  String role = STAFF;
   DateTime _selectedDay = DateTime.now();
   DateTime _focusedDay = DateTime.now();
   int _selectedIndex = 0; // Khởi tạo _selectedIndex ở đây
 
   List<WorkSchedule> allWorkSchedules = [];
   List<WorkSchedule> _filteredWorkSchedules = [];
+  List<BottomNavigationBarItem> _navBarItems = [];
 
   @override
   void initState() {
@@ -35,15 +38,20 @@ class _HomeScreenState extends State<HomeScreen> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _fetchWorkSchedulesFromFirestore();
     });
+    _loadNavBarItems();
   }
 
   void _fetchWorkSchedulesFromFirestore() async {
     try {
       final store = StoreProvider.of<AppState>(context);
       final String userCode = store.state.customer?.code ?? '';
+      final String userRole = store.state.customer?.rule ?? '';
       allWorkSchedules = await _workScheduleService.getListWork(userCode);
       setState(() {
         _filteredWorkSchedules = _getWorkSchedulesForDay(_selectedDay);
+        if (userRole != '') {
+          role = userRole;
+        }
       });
     } catch (e) {
       // print('Error fetching work schedules: $e');
@@ -67,6 +75,13 @@ class _HomeScreenState extends State<HomeScreen> {
     return allWorkSchedules
         .where((workSchedule) => isSameDay(workSchedule.shootingDate, day))
         .toList();
+  }
+
+  Future<void> _loadNavBarItems() async {
+    var items = await NavigationHelper.buildBottomNavBarItems();
+    setState(() {
+      _navBarItems = items;
+    });
   }
 
   @override
@@ -97,6 +112,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ), // Display user's email
           backgroundColor: const Color.fromARGB(255, 35, 76, 191),
           actions: [
+            if(role == ADMIN)
             IconButton(
               icon: const Icon(Icons.add, color: Colors.white),
               color: Colors.white,
@@ -231,6 +247,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
+                  if (role == ADMIN)
                   TextButton(
                     onPressed: () {
                       Navigator.of(context).push(
@@ -273,20 +290,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ],
         ),
         bottomNavigationBar: BottomNavigationBar(
-          items: const <BottomNavigationBarItem>[
-            BottomNavigationBarItem(
-              icon: Icon(Icons.home),
-              label: 'Home',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.business),
-              label: 'Nhân viên',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.location_city),
-              label: 'Địa điểm chụp',
-            ),
-          ],
+          items: _navBarItems,
           currentIndex: _selectedIndex, // Biến theo dõi mục hiện tại được chọn
           selectedItemColor: Colors.amber[800], // Màu sắc cho mục được chọn
           unselectedItemColor:

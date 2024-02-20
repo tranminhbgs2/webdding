@@ -42,7 +42,7 @@ class LocationService {
   // Phương thức để lấy danh sách tất cả nhân viên
   Future<List<Location>> listLocation(String userCode, String status) async {
     try {
-      Query query = locationsCollection.where('userCode', isEqualTo: userCode);
+      Query query = locationsCollection;
 
       // Remove the unnecessary condition
       if (status.isNotEmpty) {
