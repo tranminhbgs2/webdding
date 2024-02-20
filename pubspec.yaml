@@ -46,7 +46,6 @@ dependencies:
   redux: ^5.0.0
   flutter_launcher_icons: ^0.13.1
   shared_preferences: ^2.0.15
-  web: 0.3.0
 
 dev_dependencies:
   flutter_test:
@@ -75,6 +74,9 @@ flutter:
   assets:
     - assets/images/icons/
     - assets/fonts/
+
+dependency_overrides:
+  web: ^0.4.2
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
