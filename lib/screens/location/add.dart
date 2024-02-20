@@ -256,8 +256,7 @@ class _AddLocationState extends State<AddLocation> {
                 padding: const EdgeInsets.symmetric(horizontal: 32.0),
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    // ignore: deprecated_member_use
-                    primary: Colors.blueAccent,
+                    backgroundColor: Colors.blueAccent,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(15),
                     ),
