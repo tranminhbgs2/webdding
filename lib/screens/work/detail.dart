@@ -91,18 +91,12 @@ class WorkScheduleDetailScreen extends StatelessWidget {
                     ),
                   );
                 },
+                style: ElevatedButton.styleFrom(backgroundColor: Colors.blue),
                 child: const Text(
                   'Chỉnh Sửa',
                   style: TextStyle(color: Colors.white),
                 ),
-                style: ElevatedButton.styleFrom(primary: Colors.blue),
               ),
-              // const SizedBox(height: 10),
-              // ElevatedButton(
-              //   onPressed: () {/* Chức năng xóa */},
-              //   style: ElevatedButton.styleFrom(primary: Colors.red),
-              //   child: const Text('Xóa'),
-              // ),
             ],
           ),
         ),

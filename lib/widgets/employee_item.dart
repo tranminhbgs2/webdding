@@ -124,38 +124,6 @@ class EmployeeItem extends StatelessWidget {
                     ),
                   ),
                 )
-                // ElevatedButton(
-                //   onPressed: () {
-                //     Navigator.push(
-                //       context,
-                //       MaterialPageRoute(
-                //         builder: (context) =>
-                //             EmployeeDetailScreen(customer: employee),
-                //       ),
-                //     );
-                //   },
-                //   style: ElevatedButton.styleFrom(
-                //     primary: Color(0xFF4B39EF),
-                //     onPrimary: Colors.white,
-                //     padding: EdgeInsets.zero,
-                //     shape: RoundedRectangleBorder(
-                //       borderRadius: BorderRadius.circular(8),
-                //     ),
-                //   ),
-                //   child: Container(
-                //     width: 70,
-                //     height: 36,
-                //     alignment: Alignment.center,
-                //     child: Text(
-                //       'Chi tiết',
-                //       style: TextStyle(
-                //         fontFamily: 'Outfit',
-                //         fontSize: 14,
-                //         fontWeight: FontWeight.normal,
-                //       ),
-                //     ),
-                //   ),
-                // ),
               ],
             ),
           ),
