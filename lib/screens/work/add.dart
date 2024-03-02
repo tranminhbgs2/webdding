@@ -15,7 +15,7 @@ import 'package:webdding/services/employee/employee.dart';
 import 'package:webdding/services/work/work.dart';
 import 'package:webdding/utils/constant.dart';
 import 'package:webdding/utils/helpers.dart';
-import 'package:webdding/utils/validate.dart';
+// import 'package:webdding/utils/validate.dart';
 import 'package:webdding/widgets/location_selector.dart';
 // Thêm các import cần thiết khác tại đây
 
@@ -62,15 +62,10 @@ class _AddWorkScheduleScreenState extends State<AddWorkScheduleScreen> {
   String? _selectedCskhId;
 
   String? _designerPriceError;
-  bool _isdesignerPriceValid = false;
   String? _packagePriceError;
-  bool _ispackagePriceValid = false;
   String? _makeupPriceError;
-  bool _ismakeupPriceValid = false;
   String? _photographyPriceError;
-  bool _isphotographyPriceValid = false;
   String? _cskhPriceError;
-  bool _iscskhPriceValid = false;
   // Thêm các trường thông tin khác nếu cần
   bool _isLoading = false;
 
@@ -84,63 +79,39 @@ class _AddWorkScheduleScreenState extends State<AddWorkScheduleScreen> {
     _designerPriceController.addListener(() {
       Future.delayed(const Duration(milliseconds: 50), () {
         setState(() {
-          _designerPriceError = validateNotNull(_designerPriceController.text);
-          if (_designerPriceError == null) {
-            _isdesignerPriceValid = true;
-            _designerPriceError = null;
-          } else {
-            _isdesignerPriceValid = false;
-          }
+          // _designerPriceError = validateNotNull(_designerPriceController.text);
+          
         });
       });
     });
     _packagePriceController.addListener(() {
       setState(() {
-        _packagePriceError = validateNotNull(_packagePriceController.text);
-        if (_packagePriceError == null) {
-          _ispackagePriceValid = true;
-        } else {
-          _ispackagePriceValid = false;
-        }
+        // _packagePriceError = validateNotNull(_packagePriceController.text);
+        
       });
     });
     _photographyPriceController.addListener(() {
       Future.delayed(const Duration(milliseconds: 50), () {
         setState(() {
-          _photographyPriceError =
-              validateNotNull(_photographyPriceController.text);
-          if (_photographyPriceError == null) {
-            _isphotographyPriceValid = true;
-            _photographyPriceError = null;
-          } else {
-            _isphotographyPriceValid = false;
-          }
+          // _photographyPriceError =
+              // validateNotNull(_photographyPriceController.text);
+          
         });
       });
     });
     _makeupPriceController.addListener(() {
       Future.delayed(const Duration(milliseconds: 50), () {
         setState(() {
-          _makeupPriceError = validateNotNull(_makeupPriceController.text);
-          if (_makeupPriceError == null) {
-            _ismakeupPriceValid = true;
-            _makeupPriceError = null;
-          } else {
-            _ismakeupPriceValid = false;
-          }
+          // _makeupPriceError = validateNotNull(_makeupPriceController.text);
+          
         });
       });
     });
     _cskhPriceController.addListener(() {
       Future.delayed(const Duration(milliseconds: 50), () {
         setState(() {
-          _cskhPriceError = validateNotNull(_cskhPriceController.text);
-          if (_cskhPriceError == null) {
-            _iscskhPriceValid = true;
-            _cskhPriceError = null;
-          } else {
-            _iscskhPriceValid = false;
-          }
+          // _cskhPriceError = validateNotNull(_cskhPriceController.text);
+          
         });
       });
     });
@@ -323,7 +294,7 @@ class _AddWorkScheduleScreenState extends State<AddWorkScheduleScreen> {
                           var empMakeup = snapshot.data!;
                           return InputDecorator(
                             decoration: InputDecoration(
-                              labelText: "Makeup*",
+                              labelText: "Makeup",
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(5.0),
                               ),
@@ -331,7 +302,7 @@ class _AddWorkScheduleScreenState extends State<AddWorkScheduleScreen> {
                                   horizontal: 10.0, vertical: 5.0),
                             ),
                             child: DropdownButtonFormField<String>(
-                              validator: validateNotNull,
+                              // validator: validateNotNull,
                               value: _selectedMakeupArtistId,
                               items: empMakeup.map((Customer employee) {
                                 return DropdownMenuItem<String>(
@@ -355,13 +326,13 @@ class _AddWorkScheduleScreenState extends State<AddWorkScheduleScreen> {
                       child: TextFormField(
                         controller: _makeupPriceController,
                         keyboardType: TextInputType.number,
-                        validator: validateNotNull,
+                        // validator: validateNotNull,
                         inputFormatters: <TextInputFormatter>[
                           FilteringTextInputFormatter
                               .digitsOnly, // Chỉ cho phép nhập số
                         ],
                         decoration: InputDecoration(
-                          labelText: 'Giá Makeup*',
+                          labelText: 'Giá Makeup',
                           hintText: 'Nhập giá tiền', // Gợi ý nếu input trống
 
                           prefixIcon: const Icon(Icons
@@ -403,7 +374,7 @@ class _AddWorkScheduleScreenState extends State<AddWorkScheduleScreen> {
                                   horizontal: 10.0, vertical: 5.0),
                             ),
                             child: DropdownButtonFormField<String>(
-                              validator: validateNotNull,
+                              // validator: validateNotNull,
                               value: _selectedPhotographerId,
                               items: empMakeup.map((Customer employee) {
                                 return DropdownMenuItem<String>(
@@ -427,7 +398,7 @@ class _AddWorkScheduleScreenState extends State<AddWorkScheduleScreen> {
                       child: TextFormField(
                         controller: _photographyPriceController,
                         keyboardType: TextInputType.number,
-                        validator: validateNotNull,
+                        // validator: validateNotNull,
                         inputFormatters: <TextInputFormatter>[
                           FilteringTextInputFormatter
                               .digitsOnly, // Chỉ cho phép nhập số
@@ -475,7 +446,7 @@ class _AddWorkScheduleScreenState extends State<AddWorkScheduleScreen> {
                                   horizontal: 10.0, vertical: 5.0),
                             ),
                             child: DropdownButtonFormField<String>(
-                              validator: validateNotNull,
+                              // validator: validateNotNull,
                               value: _selectedDesignerId,
                               items: empMakeup.map((Customer employee) {
                                 return DropdownMenuItem<String>(
@@ -499,7 +470,7 @@ class _AddWorkScheduleScreenState extends State<AddWorkScheduleScreen> {
                       child: TextFormField(
                         controller: _designerPriceController,
                         keyboardType: TextInputType.number,
-                        validator: validateNotNull,
+                        // validator: validateNotNull,
                         inputFormatters: <TextInputFormatter>[
                           FilteringTextInputFormatter
                               .digitsOnly, // Chỉ cho phép nhập số
@@ -545,7 +516,7 @@ class _AddWorkScheduleScreenState extends State<AddWorkScheduleScreen> {
                                   horizontal: 10.0, vertical: 5.0),
                             ),
                             child: DropdownButtonFormField<String>(
-                              validator: validateNotNull,
+                              // validator: validateNotNull,
                               value: _selectedCskhId,
                               items: empMakeup.map((Customer employee) {
                                 return DropdownMenuItem<String>(
@@ -569,7 +540,7 @@ class _AddWorkScheduleScreenState extends State<AddWorkScheduleScreen> {
                       child: TextFormField(
                         controller: _cskhPriceController,
                         keyboardType: TextInputType.number,
-                        validator: validateNotNull,
+                        // validator: validateNotNull,
                         inputFormatters: <TextInputFormatter>[
                           FilteringTextInputFormatter
                               .digitsOnly, // Chỉ cho phép nhập số
@@ -598,7 +569,7 @@ class _AddWorkScheduleScreenState extends State<AddWorkScheduleScreen> {
                 TextFormField(
                   controller: _packagePriceController,
                   keyboardType: TextInputType.number,
-                  validator: validateNotNull,
+                  // validator: validateNotNull,
                   inputFormatters: <TextInputFormatter>[
                     FilteringTextInputFormatter
                         .digitsOnly, // Chỉ cho phép nhập số
@@ -637,8 +608,9 @@ class _AddWorkScheduleScreenState extends State<AddWorkScheduleScreen> {
                           final DateTime? pickedDate = await showDatePicker(
                             context: context,
                             initialDate: _selectedDate,
-                            firstDate: DateTime.now(),
+                            firstDate: DateTime(1900),
                             lastDate: DateTime(2100),
+                            locale: const Locale('vi', 'VN'), // Set ngôn ngữ thành Tiếng Việt
                           );
                           if (pickedDate != null &&
                               pickedDate != _selectedDate) {

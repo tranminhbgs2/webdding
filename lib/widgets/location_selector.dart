@@ -86,7 +86,7 @@ class _LocationSelectorState extends State<LocationSelector> {
                       bottom: 10.0), // Khoảng cách giữa các hàng
                   child: InputDecorator(
                     decoration: InputDecoration(
-                      labelText: "Chọn địa điểm*",
+                      labelText: "Chọn địa điểm",
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(5.0),
                       ),
@@ -98,7 +98,7 @@ class _LocationSelectorState extends State<LocationSelector> {
                           value: _selectedLocationIds[index].isEmpty
                               ? null
                               : _selectedLocationIds[index],
-                          validator: validateNotNull,
+                          // validator: validateNotNull,
                           items: locations.map((Location location) {
                             return DropdownMenuItem<String>(
                               value: location.id,

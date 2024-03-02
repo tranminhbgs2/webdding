@@ -81,7 +81,7 @@ class TaskItem extends StatelessWidget {
                           Padding(
                             padding: const EdgeInsetsDirectional.fromSTEB(
                                 0, 0, 8, 0),
-                            child: Container(
+                            child: SizedBox(
                               width: 300, // Điều chỉnh chiều rộng tùy ý
                               child: Text(
                                 workSchedule.customerName,

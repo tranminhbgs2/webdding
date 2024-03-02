@@ -7,6 +7,7 @@ import 'package:webdding/models/user.dart';
 import 'package:webdding/reducers/app_reducer.dart';
 import 'package:webdding/screens/login_screen.dart'; // Import the firebase_core package
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 void main() async {
   WidgetsFlutterBinding
@@ -41,6 +42,16 @@ class MyApp extends StatelessWidget {
     return StoreProvider<AppState>(
       store: store,
       child: const MaterialApp(
+        localizationsDelegates: [
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+        ],
+        supportedLocales: [
+          const Locale('en'),
+          const Locale('fr'),
+          const Locale('vi', 'VN'),
+        ],
+        locale: const Locale('vi', 'VN'),
         home: LoginScreen(),
       ),
     );

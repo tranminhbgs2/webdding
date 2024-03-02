@@ -79,29 +79,37 @@ class _UpdateWorkScheduleScreenState extends State<UpdateWorkScheduleScreen> {
   @override
   void initState() {
     super.initState();
-      _customerNameController.text = widget.workSchedule.customerName;
-      _customerPhoneController.text = widget.workSchedule.customerPhone;
-      _customerEmailController.text = widget.workSchedule.customerEmail;
-      _notesController.text = widget.workSchedule.notes;
-      _packagePriceController.text =
-          widget.workSchedule.packagePrice.toString();
-      _makeupPriceController.text = widget.workSchedule.makeupPrice.toString();
-      _photographyPriceController.text =
-          widget.workSchedule.photographerPrice.toString();
-      _designerPriceController.text =
-          widget.workSchedule.designerPrice.toString();
-      _cskhPriceController.text =
-          widget.workSchedule.cskh.toString();
-      _cskhPriceController.text =
-          widget.workSchedule.cskhPrice.toString();
-      _selectedDate = widget.workSchedule.shootingDate;
-      _selectedTime = widget.workSchedule.shootingTime;
-      _selectedLocations = widget.workSchedule.locationIds;
+    _customerNameController.text = widget.workSchedule.customerName;
+    _customerPhoneController.text = widget.workSchedule.customerPhone;
+    _customerEmailController.text = widget.workSchedule.customerEmail;
+    _notesController.text = widget.workSchedule.notes;
+    _packagePriceController.text = widget.workSchedule.packagePrice.toString();
+    _makeupPriceController.text = widget.workSchedule.makeupPrice.toString();
+    _photographyPriceController.text =
+        widget.workSchedule.photographerPrice.toString();
+    _designerPriceController.text =
+        widget.workSchedule.designerPrice.toString();
+    _cskhPriceController.text = widget.workSchedule.cskh.toString();
+    _cskhPriceController.text = widget.workSchedule.cskhPrice.toString();
+    _selectedDate = widget.workSchedule.shootingDate;
+    _selectedTime = widget.workSchedule.shootingTime;
+    _selectedLocations = widget.workSchedule.locationIds;
+    if (widget.workSchedule.photographerId != "") {
       _selectedPhotographerId = widget.workSchedule.photographerId;
+    }
+    // _selectedPhotographerId = widget.workSchedule.photographerId;
+    if (widget.workSchedule.makeupArtistId != "") {
       _selectedMakeupArtistId = widget.workSchedule.makeupArtistId;
+    }
+    // _selectedMakeupArtistId = widget.workSchedule.makeupArtistId;
+    if (widget.workSchedule.designerId != "") {
       _selectedDesignerId = widget.workSchedule.designerId;
+    }
+    if (widget.workSchedule.cskhId != "") {
       _selectedCskhId = widget.workSchedule.cskhId;
-      // Thêm các khởi tạo khác nếu cần
+    }
+    // _selectedCskhId = widget.workSchedule.cskhId;
+    // Thêm các khởi tạo khác nếu cần
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _getAllLocaltion();
     });
@@ -109,63 +117,63 @@ class _UpdateWorkScheduleScreenState extends State<UpdateWorkScheduleScreen> {
     _designerPriceController.addListener(() {
       Future.delayed(const Duration(milliseconds: 50), () {
         setState(() {
-          _designerPriceError = validateNotNull(_designerPriceController.text);
-          if (_designerPriceError == null) {
-            _isdesignerPriceValid = true;
-            _designerPriceError = null;
-          } else {
-            _isdesignerPriceValid = false;
-          }
+          // _designerPriceError = validateNotNull(_designerPriceController.text);
+          // if (_designerPriceError == null) {
+          //   _isdesignerPriceValid = true;
+          //   _designerPriceError = null;
+          // } else {
+          //   _isdesignerPriceValid = false;
+          // }
         });
       });
     });
     _packagePriceController.addListener(() {
       setState(() {
-        _packagePriceError = validateNotNull(_packagePriceController.text);
-        if (_packagePriceError == null) {
-          _ispackagePriceValid = true;
-        } else {
-          _ispackagePriceValid = false;
-        }
+        // _packagePriceError = validateNotNull(_packagePriceController.text);
+        // if (_packagePriceError == null) {
+        //   _ispackagePriceValid = true;
+        // } else {
+        //   _ispackagePriceValid = false;
+        // }
       });
     });
     _photographyPriceController.addListener(() {
       Future.delayed(const Duration(milliseconds: 50), () {
         setState(() {
-          _photographyPriceError =
-              validateNotNull(_photographyPriceController.text);
-          if (_photographyPriceError == null) {
-            _isphotographyPriceValid = true;
-            _photographyPriceError = null;
-          } else {
-            _isphotographyPriceValid = false;
-          }
+          // _photographyPriceError =
+          //     validateNotNull(_photographyPriceController.text);
+          // if (_photographyPriceError == null) {
+          //   _isphotographyPriceValid = true;
+          //   _photographyPriceError = null;
+          // } else {
+          //   _isphotographyPriceValid = false;
+          // }
         });
       });
     });
     _makeupPriceController.addListener(() {
       Future.delayed(const Duration(milliseconds: 50), () {
         setState(() {
-          _makeupPriceError = validateNotNull(_makeupPriceController.text);
-          if (_makeupPriceError == null) {
-            _ismakeupPriceValid = true;
-            _makeupPriceError = null;
-          } else {
-            _ismakeupPriceValid = false;
-          }
+          // _makeupPriceError = validateNotNull(_makeupPriceController.text);
+          // if (_makeupPriceError == null) {
+          //   _ismakeupPriceValid = true;
+          //   _makeupPriceError = null;
+          // } else {
+          //   _ismakeupPriceValid = false;
+          // }
         });
       });
     });
     _cskhPriceController.addListener(() {
       Future.delayed(const Duration(milliseconds: 50), () {
         setState(() {
-          _cskhPriceError = validateNotNull(_cskhPriceController.text);
-          if (_cskhPriceError == null) {
-            _iscskhPriceValid = true;
-            _cskhPriceError = null;
-          } else {
-            _iscskhPriceValid = false;
-          }
+          // _cskhPriceError = validateNotNull(_cskhPriceController.text);
+          // if (_cskhPriceError == null) {
+          //   _iscskhPriceValid = true;
+          //   _cskhPriceError = null;
+          // } else {
+          //   _iscskhPriceValid = false;
+          // }
         });
       });
     });
@@ -307,7 +315,7 @@ class _UpdateWorkScheduleScreenState extends State<UpdateWorkScheduleScreen> {
     return Scaffold(
       appBar: AppBar(
           title: const Text(
-            'Thêm mới lịch làm việc',
+            'Cập nhật lịch làm việc',
             style: TextStyle(color: Colors.white),
           ),
           backgroundColor: const Color.fromARGB(255, 35, 76, 191),
@@ -332,7 +340,9 @@ class _UpdateWorkScheduleScreenState extends State<UpdateWorkScheduleScreen> {
                 // Thêm DatePicker và TimePicker cho việc chọn ngày và giờ
                 // ... các trường nhập liệu khác ...
                 LocationSelector(
-                    onSelectedLocationsChanged: _handleSelectedLocationsChange, selectedLocationIds: _selectedLocations,),
+                  onSelectedLocationsChanged: _handleSelectedLocationsChange,
+                  selectedLocationIds: _selectedLocations,
+                ),
                 // ... các trường nhập liệu và nút lưu khác ...
                 const SizedBox(height: 16.0),
                 Row(
@@ -355,7 +365,7 @@ class _UpdateWorkScheduleScreenState extends State<UpdateWorkScheduleScreen> {
                                   horizontal: 10.0, vertical: 5.0),
                             ),
                             child: DropdownButtonFormField<String>(
-                              validator: validateNotNull,
+                              // validator: validateNotNull,
                               value: _selectedMakeupArtistId,
                               items: empMakeup.map((Customer employee) {
                                 return DropdownMenuItem<String>(
@@ -379,7 +389,7 @@ class _UpdateWorkScheduleScreenState extends State<UpdateWorkScheduleScreen> {
                       child: TextFormField(
                         controller: _makeupPriceController,
                         keyboardType: TextInputType.number,
-                        validator: validateNotNull,
+                        // validator: validateNotNull,
                         inputFormatters: <TextInputFormatter>[
                           FilteringTextInputFormatter
                               .digitsOnly, // Chỉ cho phép nhập số
@@ -426,7 +436,7 @@ class _UpdateWorkScheduleScreenState extends State<UpdateWorkScheduleScreen> {
                                   horizontal: 10.0, vertical: 5.0),
                             ),
                             child: DropdownButtonFormField<String>(
-                              validator: validateNotNull,
+                              // validator: validateNotNull,
                               value: _selectedPhotographerId,
                               items: empMakeup.map((Customer employee) {
                                 return DropdownMenuItem<String>(
@@ -450,7 +460,7 @@ class _UpdateWorkScheduleScreenState extends State<UpdateWorkScheduleScreen> {
                       child: TextFormField(
                         controller: _photographyPriceController,
                         keyboardType: TextInputType.number,
-                        validator: validateNotNull,
+                        // validator: validateNotNull,
                         inputFormatters: <TextInputFormatter>[
                           FilteringTextInputFormatter
                               .digitsOnly, // Chỉ cho phép nhập số
@@ -475,7 +485,6 @@ class _UpdateWorkScheduleScreenState extends State<UpdateWorkScheduleScreen> {
                     ),
                   ],
                 ),
-
                 const SizedBox(height: 16.0),
                 Row(
                   children: <Widget>[
@@ -497,7 +506,7 @@ class _UpdateWorkScheduleScreenState extends State<UpdateWorkScheduleScreen> {
                                   horizontal: 10.0, vertical: 5.0),
                             ),
                             child: DropdownButtonFormField<String>(
-                              validator: validateNotNull,
+                              // validator: validateNotNull,
                               value: _selectedDesignerId,
                               items: empMakeup.map((Customer employee) {
                                 return DropdownMenuItem<String>(
@@ -521,7 +530,7 @@ class _UpdateWorkScheduleScreenState extends State<UpdateWorkScheduleScreen> {
                       child: TextFormField(
                         controller: _designerPriceController,
                         keyboardType: TextInputType.number,
-                        validator: validateNotNull,
+                        // validator: validateNotNull,
                         inputFormatters: <TextInputFormatter>[
                           FilteringTextInputFormatter
                               .digitsOnly, // Chỉ cho phép nhập số
@@ -567,7 +576,7 @@ class _UpdateWorkScheduleScreenState extends State<UpdateWorkScheduleScreen> {
                                   horizontal: 10.0, vertical: 5.0),
                             ),
                             child: DropdownButtonFormField<String>(
-                              validator: validateNotNull,
+                              // validator: validateNotNull,
                               value: _selectedCskhId,
                               items: empMakeup.map((Customer employee) {
                                 return DropdownMenuItem<String>(
@@ -591,7 +600,7 @@ class _UpdateWorkScheduleScreenState extends State<UpdateWorkScheduleScreen> {
                       child: TextFormField(
                         controller: _cskhPriceController,
                         keyboardType: TextInputType.number,
-                        validator: validateNotNull,
+                        // validator: validateNotNull,
                         inputFormatters: <TextInputFormatter>[
                           FilteringTextInputFormatter
                               .digitsOnly, // Chỉ cho phép nhập số
@@ -620,7 +629,7 @@ class _UpdateWorkScheduleScreenState extends State<UpdateWorkScheduleScreen> {
                 TextFormField(
                   controller: _packagePriceController,
                   keyboardType: TextInputType.number,
-                  validator: validateNotNull,
+                  // validator: validateNotNull,
                   inputFormatters: <TextInputFormatter>[
                     FilteringTextInputFormatter
                         .digitsOnly, // Chỉ cho phép nhập số
@@ -659,8 +668,9 @@ class _UpdateWorkScheduleScreenState extends State<UpdateWorkScheduleScreen> {
                           final DateTime? pickedDate = await showDatePicker(
                             context: context,
                             initialDate: _selectedDate,
-                            firstDate: DateTime.now(),
+                            firstDate: DateTime(1900),
                             lastDate: DateTime(2100),
+                            locale: const Locale('vi', 'VN'), // Set ngôn ngữ thành Tiếng Việt
                           );
                           if (pickedDate != null &&
                               pickedDate != _selectedDate) {
@@ -788,7 +798,6 @@ class _UpdateWorkScheduleScreenState extends State<UpdateWorkScheduleScreen> {
                   padding: const EdgeInsets.symmetric(horizontal: 32.0),
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      
                       backgroundColor: Colors.blueAccent,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(15),

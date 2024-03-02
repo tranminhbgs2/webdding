@@ -141,7 +141,9 @@ class EmployeeService {
 
   Future<Customer?> getEmployeeById(String? id) async {
     try {
-
+      if (id == null) {
+        return null;
+      }
       // Use a query to filter documents by email
       QuerySnapshot querySnapshot = await employeesCollection
           .where(FieldPath.documentId, isEqualTo: id)

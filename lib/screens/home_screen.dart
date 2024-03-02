@@ -112,25 +112,26 @@ class _HomeScreenState extends State<HomeScreen> {
           ), // Display user's email
           backgroundColor: const Color.fromARGB(255, 35, 76, 191),
           actions: [
-            if(role == ADMIN)
-            IconButton(
-              icon: const Icon(Icons.add, color: Colors.white),
-              color: Colors.white,
-              onPressed: () {
-                // Xử lý khi người dùng nhấn nút "Add Employee" ở đây
-                // Ví dụ: Mở màn hình thêm nhân viên
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) => const AddWorkScheduleScreen(),
-                  ),
-                );
-              },
-            ),
+            if (role == ADMIN)
+              IconButton(
+                icon: const Icon(Icons.add, color: Colors.white),
+                color: Colors.white,
+                onPressed: () {
+                  // Xử lý khi người dùng nhấn nút "Add Employee" ở đây
+                  // Ví dụ: Mở màn hình thêm nhân viên
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => const AddWorkScheduleScreen(),
+                    ),
+                  );
+                },
+              ),
           ],
         ),
         body: Column(
           children: [
             TableCalendar(
+              locale: 'vi_VN', // Sử dụng locale của thiết bị
               firstDay: DateTime.utc(2010, 10, 16),
               lastDay: DateTime.utc(2030, 3, 14),
               focusedDay: _focusedDay,
@@ -248,23 +249,23 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ),
                   if (role == ADMIN)
-                  TextButton(
-                    onPressed: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => const AddWorkScheduleScreen(),
+                    TextButton(
+                      onPressed: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => const AddWorkScheduleScreen(),
+                          ),
+                        );
+                      },
+                      child: const Text(
+                        'Thêm công việc',
+                        style: TextStyle(
+                          color: Colors.blue,
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
                         ),
-                      );
-                    },
-                    child: const Text(
-                      'Thêm công việc',
-                      style: TextStyle(
-                        color: Colors.blue,
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
                       ),
                     ),
-                  ),
                 ],
               ),
             ),
